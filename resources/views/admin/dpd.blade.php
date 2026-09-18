@@ -148,9 +148,9 @@
     </div>
 </section>
 
-<!-- ========================================================
-     SECTION MENGENAL LEBIH DEKAT ANGGOTA DEWAN & TOKOH NASDEM BANYUMAS (LATAR KUNING EMAS)
-     ======================================================== -->
+{{-- ========================================================
+     SECTION MENGENAL LEBIH DEKAT PENGURUS DPD NASDEM BANYUMAS (LATAR KUNING EMAS)
+     ======================================================== --}}
 <section style="background: #ffb700; padding: 75px 24px 80px;">
     <div style="max-width: 1300px; margin: 0 auto;">
 
@@ -160,7 +160,7 @@
                 MENGENAL LEBIH DEKAT
             </p>
             <h2 style="font-size: 32px; font-weight: 900; color: #001844; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 0.5px;">
-                ANGGOTA DEWAN &amp; PENGURUS DPD NASDEM BANYUMAS
+                PENGURUS DPD NASDEM BANYUMAS
             </h2>
             <div style="width: 60px; height: 3.5px; background: #001844; margin: 0 auto 30px;"></div>
 
@@ -178,7 +178,7 @@
             </div>
         </div>
 
-        <!-- Grid Tokoh & Anggota Dewan / Pengurus DPD Banyumas -->
+        {{-- Grid Pengurus DPD Banyumas --}}
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px;" id="dpdOfficersGrid">
             @forelse($officers as $officer)
             <div class="dpd-card-item" data-category="{{ $officer->category }}" style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 24px rgba(0, 24, 68, 0.12); text-align: center; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-6px)'" onmouseout="this.style.transform='none'">

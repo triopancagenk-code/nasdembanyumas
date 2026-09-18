@@ -128,7 +128,8 @@ class RoleAuthenticationAndPovTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('EDRIS SANTOSO, S.E.');
         $response->assertSee('Ketua DPD Partai NasDem Kabupaten Banyumas');
-        $response->assertSee('ANGGOTA DEWAN &amp; PENGURUS DPD NASDEM BANYUMAS', false);
+        $response->assertSee('PENGURUS DPD NASDEM BANYUMAS', false);
+        $response->assertDontSee('ANGGOTA DEWAN', false);
         $response->assertSee('RUBRIK');
         $response->assertSee('KABAR');
         $response->assertSee('PPID');
