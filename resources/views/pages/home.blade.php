@@ -133,19 +133,14 @@
                     </span>
                 </a>
                 <div class="news-info">
-                    <h3 style="margin: 0 0 4px 0;">
-                        <a href="{{ route('berita.detail', $news->slug) }}" style="color: #001b4d; text-decoration: none; font-size: 15px; font-weight: 800; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.15s ease;" onmouseover="this.style.color='#d97706'" onmouseout="this.style.color='#001b4d'">
+                    <h3 style="margin-top: 4px;">
+                        <a href="{{ route('berita.detail', $news->slug) }}" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; line-height: 1.4;">
                             {{ $news->title }}
                         </a>
                     </h3>
-                    @if(!empty($news->excerpt))
-                        <p style="color: #475569; font-size: 12.5px; line-height: 1.45; margin: 4px 0 8px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            {{ $news->excerpt }}
-                        </p>
-                    @endif
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
-                        <span style="color: #64748b; font-size: 11.5px; font-weight: 600;">{{ $news->published_at ? $news->published_at->translatedFormat('d M Y') : '' }}</span>
-                        <a href="{{ route('berita.detail', $news->slug) }}" style="color: #d97706; font-size: 12px; font-weight: 800; text-decoration: none;" onmouseover="this.style.color='#b45309'" onmouseout="this.style.color='#d97706'">Baca →</a>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
+                        <span style="color: #94a3b8; font-size: 12px;">{{ $news->published_at ? $news->published_at->translatedFormat('d M Y') : '' }}</span>
+                        <a href="{{ route('berita.detail', $news->slug) }}" style="color: #ffb700; font-size: 12px; font-weight: 700; text-decoration: none;">Baca →</a>
                     </div>
                 </div>
             </article>
@@ -157,20 +152,12 @@
                     <img src="{{ asset(ltrim($item['image'] ?? 'images/congress.jpg', '/')) }}" alt="{{ $item['title'] ?? '' }}">
                 </a>
                 <div class="news-info">
-                    <h3 style="margin: 0 0 4px 0;">
-                        <a href="{{ route('berita') }}" style="color: #001b4d; text-decoration: none; font-size: 15px; font-weight: 800; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" onmouseover="this.style.color='#d97706'" onmouseout="this.style.color='#001b4d'">
+                    <h3>
+                        <a href="{{ route('berita') }}">
                             {{ $item['title'] ?? '' }}
                         </a>
                     </h3>
-                    @if(!empty($item['desc']))
-                        <p style="color: #475569; font-size: 12.5px; line-height: 1.45; margin: 4px 0 8px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            {{ $item['desc'] }}
-                        </p>
-                    @endif
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
-                        <span style="color: #64748b; font-size: 11.5px; font-weight: 600;">{{ $item['date'] ?? '' }}</span>
-                        <a href="{{ route('berita') }}" style="color: #d97706; font-size: 12px; font-weight: 800; text-decoration: none;" onmouseover="this.style.color='#b45309'" onmouseout="this.style.color='#d97706'">Baca →</a>
-                    </div>
+                    <span>{{ $item['date'] ?? '' }}</span>
                 </div>
             </article>
             @endforeach

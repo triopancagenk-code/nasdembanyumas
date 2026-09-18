@@ -52,11 +52,10 @@
         </ul>
     </nav>
 
-    <!-- Right Side Actions: Auth, Search, & Mobile Hamburger Menu (Garis 3) -->
-    <div class="nav-right-actions" style="display: flex; align-items: center; gap: 10px;">
+    <!-- Right Side Actions: Auth & Search -->
+    <div style="display: flex; align-items: center; gap: 12px;">
         @auth
-            {{-- Desktop User Pill (Hidden on Mobile <= 768px) --}}
-            <div class="user-pill desktop-user-pill" style="display: flex; align-items: center; gap: 8px; background: rgba(0, 19, 51, 0.7); border: 1px solid rgba(255, 183, 0, 0.4); padding: 5px 12px; border-radius: 20px;">
+            <div class="user-pill" style="display: flex; align-items: center; gap: 8px; background: rgba(0, 19, 51, 0.7); border: 1px solid rgba(255, 183, 0, 0.4); padding: 5px 12px; border-radius: 20px;">
                 @if(auth()->user()->isAdmin())
                     <span style="background: #ffb700; color: #001333; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">ADMIN</span>
                 @else
@@ -76,42 +75,29 @@
                     </button>
                 </form>
             </div>
-
-            {{-- Mobile Role Pill (Visible on Mobile <= 768px, Compact next to Garis 3) --}}
-            <div class="mobile-role-pill-wrap">
-                @if(auth()->user()->isAdmin())
-                    <span class="mobile-role-pill badge-admin" title="Administrator">ADMIN</span>
-                @else
-                    <span class="mobile-role-pill badge-kader" title="Kader / Pengguna">KADER</span>
-                @endif
         @else
-            {{-- Guest Actions:
-                 - PC / Laptop (Desktop): Both 'Bergabung' and 'Login' are in the main navbar
-                 - Mobile: Only 'Bergabung' is in the main navbar; 'Login' is inside the sidebar drawer accessed via Garis 3 --}}
-            <div class="guest-nav-actions" style="display: flex; align-items: center; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
                 <a href="https://digital.partainasdem.id/v1/daftar" target="_blank" class="nav-btn-join" style="background: #ff9900; color: #001333; font-size: 13px; font-weight: 800; padding: 7px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; white-space: nowrap;" onmouseover="this.style.background='#e68a00'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#ff9900'; this.style.transform='none';">
                     Bergabung
                 </a>
-                <a href="{{ route('login') }}" class="nav-btn-login desktop-only-login" style="background: rgba(255, 255, 255, 0.05); color: #ffffff; font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 8px; border: 1.5px solid #ffffff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; white-space: nowrap;" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)';">
+                <a href="{{ route('login') }}" class="nav-btn-login" style="background: rgba(255, 255, 255, 0.05); color: #ffffff; font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 8px; border: 1.5px solid #ffffff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; white-space: nowrap;" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)';">
                     Login
                 </a>
             </div>
         @endauth
 
-        {{-- Desktop Search Button (Hidden on Mobile) --}}
-        <button class="header-search-btn" id="openSearchBtn" type="button" aria-label="Cari Berita">
+        <button class="header-search-btn" id="openSearchBtn" type="button" aria-label="Cari">
             <svg viewBox="0 0 24 24" fill="none">
                 <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"/>
                 <path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
         </button>
 
-        {{-- Mobile Hamburger Button ("Garis 3") - Always Visible on the Right in Mobile View for All POVs --}}
-        <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Buka Menu Sidebar" title="Menu Navigasi">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                <line x1="4" y1="6" x2="20" y2="6"></line>
-                <line x1="4" y1="12" x2="20" y2="12"></line>
-                <line x1="4" y1="18" x2="20" y2="18"></line>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Buka Menu">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 7H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M4 17H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
         </button>
     </div>
