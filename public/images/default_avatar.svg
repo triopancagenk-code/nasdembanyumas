@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="100%" height="100%">
+    <defs>
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#001844"/>
+            <stop offset="100%" stop-color="#000c24"/>
+        </linearGradient>
+    </defs>
+    <rect width="200" height="240" fill="url(#bgGrad)"/>
+    <!-- Head silhouette -->
+    <circle cx="100" cy="88" r="38" fill="#334155"/>
+    <!-- Body silhouette -->
+    <path d="M40 225 C40 162, 68 150, 100 150 C132 150, 160 162, 160 225 Z" fill="#334155"/>
+    <!-- Inner accent -->
+    <circle cx="100" cy="88" r="34" fill="#475569"/>
+    <path d="M48 225 C48 170, 72 158, 100 158 C128 158, 152 170, 152 225 Z" fill="#475569"/>
+    <!-- NasDem gold subtle lapel -->
+    <path d="M92 158 L100 174 L108 158" stroke="#ffb700" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
