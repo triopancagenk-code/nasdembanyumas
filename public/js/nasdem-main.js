@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* ================= MOBILE MENU ================= */
-    const menuBtn = document.getElementById('mobileMenuBtn');
+    /* ================= MOBILE MENU (GARIS 3 & SIDEBAR) ================= */
     const drawer = document.getElementById('mobileDrawer');
-    const closeBtn = document.getElementById('mobileCloseBtn');
     const backdrop = document.getElementById('mobileBackdrop');
 
     function openMobileMenu() {
@@ -20,19 +18,22 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.remove('mobile-menu-open');
     }
 
-    if (menuBtn) {
-        menuBtn.addEventListener('click', function (e) {
+    // Bind all hamburger buttons (Garis 3)
+    document.querySelectorAll('#mobileMenuBtn, .mobile-menu-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             openMobileMenu();
         });
-    }
+    });
 
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function (e) {
+    // Bind all close buttons
+    document.querySelectorAll('#mobileCloseBtn, .mobile-close-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             closeMobileMenu();
         });
-    }
+    });
 
     if (backdrop) {
         backdrop.addEventListener('click', closeMobileMenu);
@@ -43,6 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();
         });
     }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer && drawer.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
 
     const mobileMenu = document.querySelector('.mobile-menu');
 
