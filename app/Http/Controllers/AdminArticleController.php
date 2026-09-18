@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -93,20 +94,15 @@ class AdminArticleController extends Controller
         $imagePath = $validated['image'] ?? 'images/congress.jpg';
 
         if ($request->hasFile('image_file')) {
-            $uploadDir = public_path('images/uploads');
-            if (!File::isDirectory($uploadDir)) {
-                File::makeDirectory($uploadDir, 0755, true);
-            }
-
             $file = $request->file('image_file');
             $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
             $filename = 'news_' . time() . '_' . Str::random(8) . '.' . $ext;
-            $file->move($uploadDir, $filename);
-            $imagePath = 'images/uploads/' . $filename;
+            $path = $file->storeAs('uploads', $filename, 'public');
+            $imagePath = 'storage/' . $path;
         }
 
         // Auto Excerpt if empty
-        $excerpt = $validated['excerpt'];
+        $excerpt = $validated['excerpt'] ?? null;
         if (empty($excerpt)) {
             $plainText = strip_tags($validated['content']);
             $excerpt = Str::limit($plainText, 160);
@@ -169,24 +165,26 @@ class AdminArticleController extends Controller
 
         // Handle Image Replacement
         if ($request->hasFile('image_file')) {
-            $uploadDir = public_path('images/uploads');
-            if (!File::isDirectory($uploadDir)) {
-                File::makeDirectory($uploadDir, 0755, true);
-            }
-
             // Remove old uploaded image if present
-            if ($article->image && Str::contains($article->image, 'images/uploads/')) {
-                $oldFile = public_path(ltrim($article->image, '/'));
-                if (File::exists($oldFile)) {
-                    @File::delete($oldFile);
+            if ($article->image) {
+                if (Str::contains($article->image, 'storage/uploads/')) {
+                    $storageRelative = Str::after($article->image, 'storage/');
+                    if (Storage::disk('public')->exists($storageRelative)) {
+                        Storage::disk('public')->delete($storageRelative);
+                    }
+                } elseif (Str::contains($article->image, 'images/uploads/')) {
+                    $oldFile = public_path(ltrim($article->image, '/'));
+                    if (File::exists($oldFile)) {
+                        @File::delete($oldFile);
+                    }
                 }
             }
 
             $file = $request->file('image_file');
             $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
             $filename = 'news_' . time() . '_' . Str::random(8) . '.' . $ext;
-            $file->move($uploadDir, $filename);
-            $article->image = 'images/uploads/' . $filename;
+            $path = $file->storeAs('uploads', $filename, 'public');
+            $article->image = 'storage/' . $path;
         } elseif ($request->filled('image')) {
             $article->image = $request->input('image');
         }
@@ -197,7 +195,7 @@ class AdminArticleController extends Controller
         }
 
         // Auto Excerpt if empty
-        $excerpt = $validated['excerpt'];
+        $excerpt = $validated['excerpt'] ?? null;
         if (empty($excerpt)) {
             $plainText = strip_tags($validated['content']);
             $excerpt = Str::limit($plainText, 160);
@@ -234,10 +232,17 @@ class AdminArticleController extends Controller
         $title = $article->title;
 
         // Clean up uploaded image if exists
-        if ($article->image && Str::contains($article->image, 'images/uploads/')) {
-            $oldFile = public_path(ltrim($article->image, '/'));
-            if (File::exists($oldFile)) {
-                @File::delete($oldFile);
+        if ($article->image) {
+            if (Str::contains($article->image, 'storage/uploads/')) {
+                $storageRelative = Str::after($article->image, 'storage/');
+                if (Storage::disk('public')->exists($storageRelative)) {
+                    Storage::disk('public')->delete($storageRelative);
+                }
+            } elseif (Str::contains($article->image, 'images/uploads/')) {
+                $oldFile = public_path(ltrim($article->image, '/'));
+                if (File::exists($oldFile)) {
+                    @File::delete($oldFile);
+                }
             }
         }
 

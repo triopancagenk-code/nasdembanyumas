@@ -147,4 +147,29 @@ class AdminNewsTest extends TestCase
         $guestResp = $this->get('/berita/' . $draftArticle->slug);
         $guestResp->assertStatus(404);
     }
+
+    public function test_admin_can_upload_image_for_article_stored_in_public_storage(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $admin = User::where('role', 'admin')->first();
+        $file = \Illuminate\Http\UploadedFile::fake()->image('news_hero.jpg', 640, 480);
+
+        $response = $this->actingAs($admin)->post('/admin/berita', [
+            'title' => 'Berita Dengan Gambar Storage Public',
+            'category' => 'Kegiatan Partai',
+            'content' => '<p>Konten berita uji coba upload.</p>',
+            'status' => 'Published',
+            'image_file' => $file,
+        ]);
+
+        $response->assertRedirect(route('admin.berita'));
+
+        $article = Article::where('title', 'Berita Dengan Gambar Storage Public')->first();
+        $this->assertNotNull($article);
+        $this->assertStringStartsWith('storage/uploads/', $article->image);
+
+        $storagePath = \Illuminate\Support\Str::after($article->image, 'storage/');
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($storagePath);
+    }
 }

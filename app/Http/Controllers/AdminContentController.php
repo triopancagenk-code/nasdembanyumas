@@ -6,6 +6,7 @@ use App\Services\SiteContentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AdminContentController extends Controller
@@ -18,22 +19,21 @@ class AdminContentController extends Controller
     }
 
     /**
-     * Save updated website content JSON.
+     * Save all customized site content (brand, hero, values, about, cta, footer).
      */
     public function save(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
-
-        if (empty($data)) {
-            $data = $request->all();
-        }
-
-        if (empty($data)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data konten kosong atau format tidak valid.'
-            ], 422);
-        }
+        $data = $request->validate([
+            'brand' => 'nullable|array',
+            'brand.branch' => 'nullable|string',
+            'brand.logo_url' => 'nullable|string',
+            'hero_slides' => 'nullable|array',
+            'values' => 'nullable|array',
+            'news_section' => 'nullable|array',
+            'about' => 'nullable|array',
+            'cta' => 'nullable|array',
+            'footer' => 'nullable|array',
+        ]);
 
         $saved = $this->contentService->saveContent($data);
 
@@ -52,14 +52,10 @@ class AdminContentController extends Controller
 
     /**
      * Upload an image file for hero slides, news, or logo.
+     * Saved to public disk (storage/app/public/uploads) linked via php artisan storage:link.
      */
     public function uploadImage(Request $request): JsonResponse
     {
-        $uploadDir = public_path('images/uploads');
-        if (!File::isDirectory($uploadDir)) {
-            File::makeDirectory($uploadDir, 0755, true);
-        }
-
         // 1. Standard Multipart File Upload
         if ($request->hasFile('image')) {
             $request->validate([
@@ -69,10 +65,11 @@ class AdminContentController extends Controller
             $file = $request->file('image');
             $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
             $filename = 'officer_' . time() . '_' . Str::random(8) . '.' . $ext;
-            $file->move($uploadDir, $filename);
 
-            $relativeUrl = '/images/uploads/' . $filename;
-            $url = asset('images/uploads/' . $filename);
+            $path = $file->storeAs('uploads', $filename, 'public');
+
+            $relativeUrl = '/storage/' . $path;
+            $url = asset('storage/' . $path);
 
             return response()->json([
                 'success' => true,
@@ -94,10 +91,10 @@ class AdminContentController extends Controller
 
                 if ($decoded !== false) {
                     $filename = 'officer_' . time() . '_' . Str::random(8) . '.' . $ext;
-                    File::put($uploadDir . '/' . $filename, $decoded);
+                    Storage::disk('public')->put('uploads/' . $filename, $decoded);
 
-                    $relativeUrl = '/images/uploads/' . $filename;
-                    $url = asset('images/uploads/' . $filename);
+                    $relativeUrl = '/storage/uploads/' . $filename;
+                    $url = asset('storage/uploads/' . $filename);
 
                     return response()->json([
                         'success' => true,

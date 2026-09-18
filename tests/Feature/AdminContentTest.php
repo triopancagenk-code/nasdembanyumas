@@ -102,4 +102,24 @@ class AdminContentTest extends TestCase
         $revertedResponse->assertStatus(200);
         $revertedResponse->assertDontSee($newBranchName);
     }
+
+    public function test_upload_image_stores_in_public_storage_disk(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $file = \Illuminate\Http\UploadedFile::fake()->image('test_hero.jpg', 800, 600);
+
+        $response = $this->postJson('/admin/upload-image', [
+            'image' => $file,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+
+        $filename = $response->json('filename');
+        $this->assertNotEmpty($filename);
+        $this->assertStringStartsWith('/storage/uploads/', $response->json('relative_url'));
+
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists('uploads/' . $filename);
+    }
 }

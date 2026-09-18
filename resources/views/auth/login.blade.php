@@ -388,25 +388,26 @@
                 <form method="POST" action="{{ route('login') }}" id="adminLoginForm">
                     @csrf
 
-                    <!-- Email Address -->
+                    <!-- Username or Email Address -->
                     <div class="form-group">
-                        <label class="form-label" for="emailInput">Email Address</label>
+                        <label class="form-label" for="emailInput">Username / Email</label>
                         <div class="input-wrap">
                             <span class="input-icon-left">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
                             </span>
                             <input 
-                                type="email" 
+                                type="text" 
                                 id="emailInput" 
                                 name="email" 
                                 class="auth-input" 
-                                placeholder="admin@nasdem.id" 
-                                value="{{ old('email', 'admin@nasdem.id') }}" 
+                                placeholder="Masukkan username atau email" 
+                                value="{{ old('email') }}" 
                                 required 
                                 autofocus
+                                autocomplete="username"
                             >
                         </div>
                     </div>
@@ -426,9 +427,9 @@
                                 id="passwordInput" 
                                 name="password" 
                                 class="auth-input has-right-icon" 
-                                placeholder="••••••••" 
-                                value="admin123" 
+                                placeholder="Masukkan password" 
                                 required
+                                autocomplete="current-password"
                             >
                             <button type="button" class="input-icon-right" onclick="togglePasswordVisibility()" title="Lihat Password">
                                 <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

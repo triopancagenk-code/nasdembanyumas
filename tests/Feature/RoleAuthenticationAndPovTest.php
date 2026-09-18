@@ -22,7 +22,9 @@ class RoleAuthenticationAndPovTest extends TestCase
         $response->assertSee('Admin Portal');
         $response->assertSee('Sign In');
         $response->assertSee('Sign In to Dashboard');
-        $response->assertSee('admin@nasdem.id');
+        $response->assertDontSee('bapilu2026');
+        $response->assertDontSee('admin123');
+        $response->assertSee('Username / Email');
     }
 
     public function test_admin_login_redirects_to_home(): void
@@ -33,6 +35,32 @@ class RoleAuthenticationAndPovTest extends TestCase
         ]);
 
         $response->assertRedirect(route('home'));
+        $this->assertAuthenticated();
+        $this->assertTrue(auth()->user()->isAdmin());
+    }
+
+    public function test_bapilu2026_admin_can_login_with_username_or_email(): void
+    {
+        // 1. Login with username bapilu2026
+        $response = $this->post('/login', [
+            'email' => 'bapilu2026',
+            'password' => 'bapilu2026',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $this->assertAuthenticated();
+        $this->assertTrue(auth()->user()->isAdmin());
+        $this->assertEquals('bapilu2026', auth()->user()->name);
+
+        auth()->logout();
+
+        // 2. Login with email bapilu2026@nasdem.id
+        $response2 = $this->post('/login', [
+            'email' => 'bapilu2026@nasdem.id',
+            'password' => 'bapilu2026',
+        ]);
+
+        $response2->assertRedirect(route('home'));
         $this->assertAuthenticated();
         $this->assertTrue(auth()->user()->isAdmin());
     }

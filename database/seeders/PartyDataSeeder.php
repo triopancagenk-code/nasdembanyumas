@@ -36,6 +36,18 @@ class PartyDataSeeder extends Seeder
             ]
         );
 
+        // Admin Bapilu 2026
+        User::updateOrCreate(
+            ['email' => 'bapilu2026@nasdem.id'],
+            [
+                'name' => 'bapilu2026',
+                'password' => Hash::make('bapilu2026'),
+                'role' => 'admin',
+                'phone' => '0812-2026-2026',
+                'kta_number' => 'ND-BMS-BAPILU-2026',
+            ]
+        );
+
         // 2. DPD Officers (Susunan Pengurus DPD Partai NasDem Kabupaten Banyumas Periode 2026-2029)
         DpdOfficer::query()->delete();
 
@@ -44,7 +56,7 @@ class PartyDataSeeder extends Seeder
             ['category' => 'inti', 'title' => 'Ketua', 'name' => 'Edris Santoso, S.E.', 'photo' => '/images/ketua_dpd.jpg', 'phone' => '0813-2764-2853', 'sk_number' => null, 'sort_order' => 1, 'status' => 'Aktif'],
 
             // 24 Wakil Ketua Bidang
-            ['category' => 'bidang', 'title' => 'Wakil Ketua Bidang Pemenangan Pemilu', 'name' => 'Nurokhman', 'photo' => '/images/uploads/officer_1789628970_w0bwnrju.jpg', 'phone' => '0811-2511-1471', 'sk_number' => null, 'sort_order' => 2, 'status' => 'Aktif'],
+            ['category' => 'bidang', 'title' => 'Wakil Ketua Bidang Pemenangan Pemilu', 'name' => 'Nurokhman', 'photo' => '/storage/uploads/officer_1789628970_w0bwnrju.jpg', 'phone' => '0811-2511-1471', 'sk_number' => null, 'sort_order' => 2, 'status' => 'Aktif'],
             ['category' => 'bidang', 'title' => 'Wakil Ketua Bidang Organisasi dan Keanggotaan', 'name' => 'Zaqki Aulia', 'photo' => null, 'phone' => null, 'sk_number' => null, 'sort_order' => 3, 'status' => 'Aktif'],
             ['category' => 'bidang', 'title' => 'Wakil Ketua Bidang Kaderisasi dan Pendidikan Politik', 'name' => 'Toni', 'photo' => null, 'phone' => null, 'sk_number' => null, 'sort_order' => 4, 'status' => 'Aktif'],
             ['category' => 'bidang', 'title' => 'Wakil Ketua Bidang Hubungan Legislatif', 'name' => 'Vembry Dwi Widiyanto', 'photo' => null, 'phone' => null, 'sk_number' => null, 'sort_order' => 5, 'status' => 'Aktif'],

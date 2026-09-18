@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -42,19 +43,28 @@ class AdminPartyController extends Controller
             'status' => 'nullable|string|max:50',
         ]);
 
-        if (empty($validated['photo'])) {
-            $validated['photo'] = null;
-            if ($officer->photo && Str::contains($officer->photo, 'images/uploads/')) {
-                $oldFile = public_path(ltrim($officer->photo, '/'));
+        $deleteOldPhoto = function (?string $photoPath) {
+            if (empty($photoPath)) return;
+            if (Str::contains($photoPath, 'storage/uploads/')) {
+                $storageRelative = Str::after($photoPath, 'storage/');
+                if (Storage::disk('public')->exists($storageRelative)) {
+                    Storage::disk('public')->delete($storageRelative);
+                }
+            } elseif (Str::contains($photoPath, 'images/uploads/')) {
+                $oldFile = public_path(ltrim($photoPath, '/'));
                 if (File::exists($oldFile)) {
                     @File::delete($oldFile);
                 }
             }
-        } elseif ($officer->photo && $officer->photo !== $validated['photo'] && Str::contains($officer->photo, 'images/uploads/')) {
-            $oldFile = public_path(ltrim($officer->photo, '/'));
-            if (File::exists($oldFile)) {
-                @File::delete($oldFile);
+        };
+
+        if (empty($validated['photo'])) {
+            $validated['photo'] = null;
+            if ($officer->photo) {
+                $deleteOldPhoto($officer->photo);
             }
+        } elseif ($officer->photo && $officer->photo !== $validated['photo']) {
+            $deleteOldPhoto($officer->photo);
         }
 
         $officer->update($validated);
