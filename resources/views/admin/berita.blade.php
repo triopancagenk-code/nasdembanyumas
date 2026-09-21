@@ -2,6 +2,33 @@
 
 @section('title', 'Kelola Berita – POV Admin DPD Partai NasDem Banyumas')
 
+@push('styles')
+<style>
+    #editArticleModal input,
+    #editArticleModal select,
+    #editArticleModal textarea,
+    #createArticleModal input,
+    #createArticleModal select,
+    #createArticleModal textarea {
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        background-color: #ffffff !important;
+    }
+    #editArticleModal select option,
+    #createArticleModal select option {
+        color: #000000 !important;
+        background-color: #ffffff !important;
+    }
+    #editArticleModal input::placeholder,
+    #editArticleModal textarea::placeholder,
+    #createArticleModal input::placeholder,
+    #createArticleModal textarea::placeholder {
+        color: #64748b !important;
+        -webkit-text-fill-color: #64748b !important;
+    }
+</style>
+@endpush
+
 @section('content')
 
 {{-- Admin Top Banner --}}
@@ -105,11 +132,11 @@
     <div style="background: #ffffff; border-radius: 14px; border: 1.5px solid #e2e8f0; padding: 20px; margin-bottom: 26px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
         <form action="{{ route('admin.berita') }}" method="GET" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
             <div style="flex: 1; min-width: 250px; position: relative;">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul berita, penulis, isi konten..." style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul berita, penulis, isi konten..." style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
             </div>
 
             <div style="min-width: 180px;">
-                <select name="category" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #ffffff; color: #334155;">
+                <select name="category" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background-color: #ffffff; color: #000000; -webkit-text-fill-color: #000000;">
                     <option value="">Semua Kategori</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
@@ -118,7 +145,7 @@
             </div>
 
             <div style="min-width: 140px;">
-                <select name="status" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #ffffff; color: #334155;">
+                <select name="status" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background-color: #ffffff; color: #000000; -webkit-text-fill-color: #000000;">
                     <option value="">Semua Status</option>
                     <option value="Published" {{ request('status') == 'Published' ? 'selected' : '' }}>🟢 Published</option>
                     <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>🟡 Draft</option>
@@ -302,7 +329,7 @@
                     <label style="display: block; font-weight: 800; font-size: 14px; color: #001333; margin-bottom: 6px;">
                         Judul Berita <span style="color: #ef4444;">*</span>
                     </label>
-                    <input type="text" name="title" required placeholder="Contoh: DPD NasDem Banyumas Gelar Aksi Sosial Peduli Warga..." style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; outline: none; box-sizing: border-box;">
+                    <input type="text" name="title" required placeholder="Contoh: DPD NasDem Banyumas Gelar Aksi Sosial Peduli Warga..." style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                 </div>
 
                 {{-- Row 2: Kategori & Status & Tanggal --}}
@@ -311,7 +338,7 @@
                         <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                             Kategori Berita <span style="color: #ef4444;">*</span>
                         </label>
-                        <select name="category" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #ffffff;">
+                        <select name="category" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background-color: #ffffff; color: #000000; -webkit-text-fill-color: #000000;">
                             @foreach($categories as $cat)
                                 <option value="{{ $cat }}">{{ $cat }}</option>
                             @endforeach
@@ -322,7 +349,7 @@
                         <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                             Status Publikasi <span style="color: #ef4444;">*</span>
                         </label>
-                        <select name="status" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #ffffff;">
+                        <select name="status" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background-color: #ffffff; color: #000000; -webkit-text-fill-color: #000000;">
                             <option value="Published" selected>🟢 Published (Tampil di POV Pengguna)</option>
                             <option value="Draft">🟡 Draft (Simpan Dulu di Admin)</option>
                         </select>
@@ -332,7 +359,7 @@
                         <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                             Tanggal Terbit
                         </label>
-                        <input type="date" name="published_at" value="{{ date('Y-m-d') }}" style="width: 100%; padding: 10.5px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+                        <input type="date" name="published_at" value="{{ date('Y-m-d') }}" style="width: 100%; padding: 10.5px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                     </div>
                 </div>
 
@@ -341,7 +368,7 @@
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                         Penulis / Redaksi Berita
                     </label>
-                    <input type="text" name="author_name" value="Humas DPD NasDem Banyumas" placeholder="Humas DPD NasDem Banyumas" style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+                    <input type="text" name="author_name" value="Humas DPD NasDem Banyumas" placeholder="Humas DPD NasDem Banyumas" style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                 </div>
 
                 {{-- Foto Utama Berita --}}
@@ -350,7 +377,7 @@
                         Foto Utama Berita
                     </label>
                     <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-                        <input type="file" name="image_file" accept="image/*" onchange="previewImage(this, 'createImgPreview')" style="flex: 1; padding: 9px; border: 1.5px dashed #cbd5e1; border-radius: 8px; font-size: 13.5px;">
+                        <input type="file" name="image_file" accept="image/*" onchange="previewImage(this, 'createImgPreview')" style="flex: 1; padding: 9px; border: 1.5px dashed #cbd5e1; border-radius: 8px; font-size: 13.5px; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                         <div style="width: 100px; height: 65px; border-radius: 8px; overflow: hidden; background: #001333; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center;">
                             <img id="createImgPreview" src="{{ asset('images/congress.jpg') }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -363,7 +390,7 @@
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                         Ringkasan Berita (Lead / Excerpt)
                     </label>
-                    <textarea name="excerpt" rows="2" placeholder="Tuliskan 1-2 kalimat ringkasan yang menarik pembaca..." style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; resize: vertical;"></textarea>
+                    <textarea name="excerpt" rows="2" placeholder="Tuliskan 1-2 kalimat ringkasan yang menarik pembaca..." style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; resize: vertical; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;"></textarea>
                 </div>
 
                 {{-- Konten Lengkap --}}
@@ -374,7 +401,7 @@
                         </label>
                         <span style="font-size: 12px; color: #64748b;">Mendukung tag HTML &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;</span>
                     </div>
-                    <textarea name="content" rows="8" required placeholder="Tuliskan laporan lengkap jalannya kegiatan, kutipan narasumber, dan informasi penting lainnya..." style="width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; line-height: 1.6; outline: none; box-sizing: border-box; resize: vertical;"></textarea>
+                    <textarea name="content" rows="8" required placeholder="Tuliskan laporan lengkap jalannya kegiatan, kutipan narasumber, dan informasi penting lainnya..." style="width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; line-height: 1.6; outline: none; box-sizing: border-box; resize: vertical; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;"></textarea>
                 </div>
             </div>
 
@@ -418,7 +445,7 @@
                     <label style="display: block; font-weight: 800; font-size: 14px; color: #001333; margin-bottom: 6px;">
                         Judul Berita <span style="color: #ef4444;">*</span>
                     </label>
-                    <input type="text" id="editTitle" name="title" required style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; outline: none; box-sizing: border-box;">
+                    <input type="text" id="editTitle" name="title" required style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                 </div>
 
                 {{-- Row 2: Kategori & Status & Tanggal --}}
@@ -427,7 +454,7 @@
                         <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                             Kategori Berita <span style="color: #ef4444;">*</span>
                         </label>
-                        <select id="editCategory" name="category" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #ffffff;">
+                        <select id="editCategory" name="category" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background-color: #ffffff; color: #000000; -webkit-text-fill-color: #000000;">
                             @foreach($categories as $cat)
                                 <option value="{{ $cat }}">{{ $cat }}</option>
                             @endforeach
@@ -438,7 +465,7 @@
                         <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                             Status Publikasi <span style="color: #ef4444;">*</span>
                         </label>
-                        <select id="editStatus" name="status" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #ffffff;">
+                        <select id="editStatus" name="status" required style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background-color: #ffffff; color: #000000; -webkit-text-fill-color: #000000;">
                             <option value="Published">🟢 Published (Tampil di POV Pengguna)</option>
                             <option value="Draft">🟡 Draft (Simpan Dulu di Admin)</option>
                         </select>
@@ -448,7 +475,7 @@
                         <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                             Tanggal Terbit
                         </label>
-                        <input type="date" id="editPublishedAt" name="published_at" style="width: 100%; padding: 10.5px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+                        <input type="date" id="editPublishedAt" name="published_at" style="width: 100%; padding: 10.5px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                     </div>
                 </div>
 
@@ -457,7 +484,7 @@
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                         Penulis / Redaksi Berita
                     </label>
-                    <input type="text" id="editAuthor" name="author_name" style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+                    <input type="text" id="editAuthor" name="author_name" style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                 </div>
 
                 {{-- Foto Utama Berita --}}
@@ -466,7 +493,7 @@
                         Ganti Foto Utama Berita (Opsional)
                     </label>
                     <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-                        <input type="file" name="image_file" accept="image/*" onchange="previewImage(this, 'editImgPreview')" style="flex: 1; padding: 9px; border: 1.5px dashed #cbd5e1; border-radius: 8px; font-size: 13.5px;">
+                        <input type="file" name="image_file" accept="image/*" onchange="previewImage(this, 'editImgPreview')" style="flex: 1; padding: 9px; border: 1.5px dashed #cbd5e1; border-radius: 8px; font-size: 13.5px; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;">
                         <div style="width: 100px; height: 65px; border-radius: 8px; overflow: hidden; background: #001333; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center;">
                             <img id="editImgPreview" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -478,7 +505,7 @@
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                         Ringkasan Berita (Lead / Excerpt)
                     </label>
-                    <textarea id="editExcerpt" name="excerpt" rows="2" style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; resize: vertical;"></textarea>
+                    <textarea id="editExcerpt" name="excerpt" rows="2" style="width: 100%; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; resize: vertical; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;"></textarea>
                 </div>
 
                 {{-- Konten Lengkap --}}
@@ -486,7 +513,7 @@
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
                         Isi Berita Lengkap <span style="color: #ef4444;">*</span>
                     </label>
-                    <textarea id="editContent" name="content" rows="8" required style="width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; line-height: 1.6; outline: none; box-sizing: border-box; resize: vertical;"></textarea>
+                    <textarea id="editContent" name="content" rows="8" required style="width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; line-height: 1.6; outline: none; box-sizing: border-box; resize: vertical; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000;"></textarea>
                 </div>
             </div>
 

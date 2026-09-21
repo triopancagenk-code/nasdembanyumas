@@ -696,3 +696,37 @@ select.admin-form-control option {
 .admin-toast-close:hover {
     color: #ffffff;
 }
+
+/* ========================================================
+   BERITA & ADMIN MODALS FORM INPUT TEXT COLOR FIX
+   ======================================================== */
+#editArticleModal input,
+#editArticleModal select,
+#editArticleModal textarea,
+#createArticleModal input,
+#createArticleModal select,
+#createArticleModal textarea,
+.admin-modal input,
+.admin-modal select,
+.admin-modal textarea {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+#editArticleModal select option,
+#createArticleModal select option,
+.admin-modal select option {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+#editArticleModal input::placeholder,
+#editArticleModal textarea::placeholder,
+#createArticleModal input::placeholder,
+#createArticleModal textarea::placeholder,
+.admin-modal input::placeholder,
+.admin-modal textarea::placeholder {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+}
