@@ -17,6 +17,7 @@ class Article extends Model
         'excerpt',
         'content',
         'image',
+        'gallery',
         'author_name',
         'published_at',
         'status',
@@ -26,6 +27,12 @@ class Article extends Model
     protected $casts = [
         'published_at' => 'date',
         'views_count' => 'integer',
+        'gallery' => 'array',
+    ];
+
+    protected $appends = [
+        'image_url',
+        'gallery_urls',
     ];
 
     /**
@@ -58,7 +65,7 @@ class Article extends Model
     }
 
     /**
-     * Helper URL gambar.
+     * Helper URL gambar utama.
      */
     public function getImageUrlAttribute(): string
     {
@@ -70,5 +77,27 @@ class Article extends Model
         }
 
         return asset('images/congress.jpg');
+    }
+
+    /**
+     * Helper URL array untuk galeri foto dokumentasi.
+     *
+     * @return array<int, string>
+     */
+    public function getGalleryUrlsAttribute(): array
+    {
+        if (empty($this->gallery) || !is_array($this->gallery)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map(function ($path) {
+            if (empty($path)) {
+                return null;
+            }
+            if (Str::startsWith($path, ['http://', 'https://'])) {
+                return $path;
+            }
+            return asset(ltrim($path, '/'));
+        }, $this->gallery)));
     }
 }

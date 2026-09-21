@@ -77,6 +77,37 @@
         {!! $article->content !!}
     </div>
 
+    {{-- Article Photo Gallery / Dokumentasi Tambahan --}}
+    @if(!empty($article->gallery_urls) && count($article->gallery_urls) > 0)
+        <div style="margin-bottom: 50px; background: rgba(0, 19, 51, 0.7); border: 2px solid #ffb700; border-radius: 16px; padding: 26px; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; border-bottom: 1.5px solid rgba(255, 183, 0, 0.3); padding-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">📸</span>
+                    <div>
+                        <h3 style="font-size: 19px; font-weight: 900; color: #ffffff; margin: 0;">
+                            Galeri Foto Dokumentasi Kegiatan
+                        </h3>
+                        <span style="font-size: 12px; color: #cbd5e1;">Klik foto untuk memperbesar tampilan</span>
+                    </div>
+                </div>
+                <span style="background: #ffb700; color: #001333; font-size: 12px; font-weight: 900; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px;">
+                    {{ count($article->gallery_urls) }} FOTO
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px;">
+                @foreach($article->gallery_urls as $idx => $gUrl)
+                    <div style="position: relative; border-radius: 10px; overflow: hidden; height: 175px; background: #000c22; border: 1.5px solid rgba(255, 255, 255, 0.15); box-shadow: 0 4px 14px rgba(0,0,0,0.25); cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;" onclick="openPhotoModal('{{ $gUrl }}', 'Dokumentasi Foto #{{ $idx + 1 }} - {{ addslashes($article->title) }}')" onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.45)'; this.style.borderColor='#ffb700';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 14px rgba(0,0,0,0.25)'; this.style.borderColor='rgba(255,255,255,0.15)';">
+                        <img src="{{ $gUrl }}" alt="Dokumentasi Foto #{{ $idx + 1 }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; bottom: 8px; right: 8px; background: rgba(0, 19, 51, 0.85); color: #ffb700; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; backdrop-filter: blur(4px);">
+                            🔍 Perbesar
+                        </span>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     {{-- Share Bar --}}
     <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin-bottom: 50px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
         <div style="font-weight: 800; color: #001333; font-size: 14.5px; display: flex; align-items: center; gap: 8px;">
@@ -166,7 +197,26 @@
 
 </div>
 
+{{-- Photo Lightbox Modal --}}
+<div id="photoLightboxModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; background: rgba(0, 10, 30, 0.94); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;" onclick="closePhotoModal()">
+    <div style="position: relative; max-width: 950px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; align-items: center;" onclick="event.stopPropagation()">
+        <button type="button" onclick="closePhotoModal()" style="position: absolute; top: -45px; right: 0; background: rgba(255,255,255,0.15); border: none; color: #ffffff; width: 38px; height: 38px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">&times;</button>
+        <img id="lightboxImg" src="" alt="Perbesar Foto" style="max-width: 100%; max-height: 78vh; border-radius: 12px; border: 2.5px solid #ffb700; box-shadow: 0 20px 60px rgba(0,0,0,0.7); object-fit: contain;">
+        <p id="lightboxCaption" style="color: #cbd5e1; font-size: 14px; margin-top: 14px; text-align: center; max-width: 750px; font-weight: 600;"></p>
+    </div>
+</div>
+
 <script>
+    function openPhotoModal(url, caption) {
+        document.getElementById('lightboxImg').src = url;
+        document.getElementById('lightboxCaption').textContent = caption || '';
+        document.getElementById('photoLightboxModal').style.display = 'flex';
+    }
+
+    function closePhotoModal() {
+        document.getElementById('photoLightboxModal').style.display = 'none';
+    }
+
     function copyArticleUrl() {
         navigator.clipboard.writeText(window.location.href).then(() => {
             const btnText = document.getElementById('copyBtnText');

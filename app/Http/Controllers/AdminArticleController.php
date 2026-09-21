@@ -85,12 +85,14 @@ class AdminArticleController extends Controller
             'content' => 'required|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
             'image' => 'nullable|string',
+            'gallery_files' => 'nullable|array',
+            'gallery_files.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
             'author_name' => 'nullable|string|max:100',
             'published_at' => 'nullable|date',
             'status' => 'required|in:Published,Draft',
         ]);
 
-        // Handle Image Upload
+        // Handle Primary Image Upload
         $imagePath = $validated['image'] ?? 'images/congress.jpg';
 
         if ($request->hasFile('image_file')) {
@@ -99,6 +101,19 @@ class AdminArticleController extends Controller
             $filename = 'news_' . time() . '_' . Str::random(8) . '.' . $ext;
             $path = $file->storeAs('uploads', $filename, 'public');
             $imagePath = 'storage/' . $path;
+        }
+
+        // Handle Additional Gallery Images (Multiple Photos)
+        $gallery = [];
+        if ($request->hasFile('gallery_files')) {
+            foreach ($request->file('gallery_files') as $gFile) {
+                if ($gFile && $gFile->isValid()) {
+                    $gExt = strtolower($gFile->getClientOriginalExtension() ?: 'jpg');
+                    $gFilename = 'news_gallery_' . time() . '_' . Str::random(8) . '.' . $gExt;
+                    $gPath = $gFile->storeAs('uploads', $gFilename, 'public');
+                    $gallery[] = 'storage/' . $gPath;
+                }
+            }
         }
 
         // Auto Excerpt if empty
@@ -125,6 +140,7 @@ class AdminArticleController extends Controller
             'excerpt' => $excerpt,
             'content' => $validated['content'],
             'image' => $imagePath,
+            'gallery' => !empty($gallery) ? $gallery : null,
             'author_name' => $author,
             'published_at' => $publishedAt,
             'status' => $validated['status'],
@@ -158,12 +174,15 @@ class AdminArticleController extends Controller
             'content' => 'required|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
             'image' => 'nullable|string',
+            'gallery_files' => 'nullable|array',
+            'gallery_files.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'existing_gallery' => 'nullable|array',
             'author_name' => 'nullable|string|max:100',
             'published_at' => 'nullable|date',
             'status' => 'required|in:Published,Draft',
         ]);
 
-        // Handle Image Replacement
+        // Handle Primary Image Replacement
         if ($request->hasFile('image_file')) {
             // Remove old uploaded image if present
             if ($article->image) {
@@ -188,6 +207,55 @@ class AdminArticleController extends Controller
         } elseif ($request->filled('image')) {
             $article->image = $request->input('image');
         }
+
+        // Handle Gallery (Multiple Additional Photos)
+        $currentGallery = is_array($article->gallery) ? $article->gallery : [];
+        $keptGallery = [];
+
+        // Check retained existing gallery items
+        if ($request->has('existing_gallery')) {
+            $submittedExisting = (array) $request->input('existing_gallery', []);
+            foreach ($currentGallery as $oldPath) {
+                if (in_array($oldPath, $submittedExisting)) {
+                    $keptGallery[] = $oldPath;
+                } else {
+                    // Removed by user, delete file from storage if it is in uploads
+                    if (Str::contains($oldPath, 'storage/uploads/')) {
+                        $storageRelative = Str::after($oldPath, 'storage/');
+                        if (Storage::disk('public')->exists($storageRelative)) {
+                            Storage::disk('public')->delete($storageRelative);
+                        }
+                    }
+                }
+            }
+        } elseif (!$request->hasFile('gallery_files') && !$request->has('clear_gallery')) {
+            // If existing_gallery was not sent and clear_gallery flag not sent, keep existing
+            $keptGallery = $currentGallery;
+        } elseif ($request->has('clear_gallery')) {
+            // User cleared all gallery photos
+            foreach ($currentGallery as $oldPath) {
+                if (Str::contains($oldPath, 'storage/uploads/')) {
+                    $storageRelative = Str::after($oldPath, 'storage/');
+                    if (Storage::disk('public')->exists($storageRelative)) {
+                        Storage::disk('public')->delete($storageRelative);
+                    }
+                }
+            }
+        }
+
+        // Add newly uploaded gallery photos
+        if ($request->hasFile('gallery_files')) {
+            foreach ($request->file('gallery_files') as $gFile) {
+                if ($gFile && $gFile->isValid()) {
+                    $gExt = strtolower($gFile->getClientOriginalExtension() ?: 'jpg');
+                    $gFilename = 'news_gallery_' . time() . '_' . Str::random(8) . '.' . $gExt;
+                    $gPath = $gFile->storeAs('uploads', $gFilename, 'public');
+                    $keptGallery[] = 'storage/' . $gPath;
+                }
+            }
+        }
+
+        $article->gallery = !empty($keptGallery) ? array_values(array_unique($keptGallery)) : null;
 
         // Regenerate slug if title changed
         if ($article->title !== $validated['title']) {
@@ -231,7 +299,7 @@ class AdminArticleController extends Controller
         $article = Article::findOrFail($id);
         $title = $article->title;
 
-        // Clean up uploaded image if exists
+        // Clean up uploaded primary image if exists
         if ($article->image) {
             if (Str::contains($article->image, 'storage/uploads/')) {
                 $storageRelative = Str::after($article->image, 'storage/');
@@ -242,6 +310,18 @@ class AdminArticleController extends Controller
                 $oldFile = public_path(ltrim($article->image, '/'));
                 if (File::exists($oldFile)) {
                     @File::delete($oldFile);
+                }
+            }
+        }
+
+        // Clean up uploaded gallery images if exist
+        if (!empty($article->gallery) && is_array($article->gallery)) {
+            foreach ($article->gallery as $galPath) {
+                if (Str::contains($galPath, 'storage/uploads/')) {
+                    $storageRelative = Str::after($galPath, 'storage/');
+                    if (Storage::disk('public')->exists($storageRelative)) {
+                        Storage::disk('public')->delete($storageRelative);
+                    }
                 }
             }
         }

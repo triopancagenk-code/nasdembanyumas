@@ -385,6 +385,30 @@
                     <span style="font-size: 12px; color: #64748b; margin-top: 4px; display: block;">Format didukung: JPG, PNG, WEBP (Maksimal 10MB). Jika dikosongkan, gambar default akan digunakan.</span>
                 </div>
 
+                {{-- Foto Dokumentasi Tambahan / Galeri (Bisa Lebih dari 1 Foto) --}}
+                <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                        <label style="font-weight: 800; font-size: 13.5px; color: #001333; margin: 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📸</span>
+                            <span>Foto Tambahan / Galeri Dokumentasi (Bisa Pilih Lebih dari 1 Foto)</span>
+                        </label>
+                        <span style="font-size: 11px; font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">
+                            Bisa Upload Banyak Foto
+                        </span>
+                    </div>
+                    <p style="font-size: 12px; color: #64748b; margin: 0 0 10px 0;">
+                        Tahan tombol <strong>Ctrl</strong> (atau <strong>Shift</strong>) saat memilih file untuk mengunggah beberapa foto kegiatan sekaligus.
+                    </p>
+                    <input type="file" id="createGalleryFiles" name="gallery_files[]" multiple accept="image/*" onchange="previewCreateGallery(this)" style="width: 100%; padding: 9px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000; box-sizing: border-box;">
+
+                    <div id="createGalleryContainer" style="margin-top: 12px; display: none;">
+                        <div style="font-size: 12px; font-weight: 800; color: #475569; margin-bottom: 8px;" id="createGalleryCount">
+                            Preview Foto Terpilih:
+                        </div>
+                        <div id="createGalleryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;"></div>
+                    </div>
+                </div>
+
                 {{-- Ringkasan / Excerpt --}}
                 <div>
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
@@ -500,6 +524,38 @@
                     </div>
                 </div>
 
+                {{-- Foto Dokumentasi Tambahan / Galeri (Bisa Lebih dari 1 Foto) --}}
+                <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                        <label style="font-weight: 800; font-size: 13.5px; color: #001333; margin: 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📸</span>
+                            <span>Foto Tambahan / Galeri Dokumentasi (Bisa Pilih Lebih dari 1 Foto)</span>
+                        </label>
+                        <span style="font-size: 11px; font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">
+                            Bisa Upload Banyak Foto Sekaligus
+                        </span>
+                    </div>
+                    <p style="font-size: 12px; color: #64748b; margin: 0 0 10px 0;">
+                        Tahan tombol <strong>Ctrl</strong> (atau <strong>Shift</strong>) saat memilih file untuk memilih beberapa foto sekaligus. Foto baru akan ditambahkan ke dokumentasi berita.
+                    </p>
+
+                    <input type="file" id="editGalleryFiles" name="gallery_files[]" multiple accept="image/*" onchange="previewEditGallery(this)" style="width: 100%; padding: 9px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; color: #000000; background-color: #ffffff; -webkit-text-fill-color: #000000; box-sizing: border-box;">
+
+                    {{-- Existing & New Gallery Previews --}}
+                    <div id="editGalleryContainer" style="margin-top: 14px; display: none;">
+                        <div style="font-size: 12px; font-weight: 800; color: #475569; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                            <span id="editGalleryCount">Foto Dokumentasi Tersimpan:</span>
+                            <button type="button" onclick="clearAllEditGallery()" style="background: #fee2e2; color: #dc2626; border: none; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; cursor: pointer;">
+                                🗑️ Hapus Semua Foto Tambahan
+                            </button>
+                        </div>
+                        <input type="hidden" name="clear_gallery" id="editClearGalleryInput" value="0">
+                        <div id="editGalleryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;">
+                            <!-- Filled dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Ringkasan / Excerpt --}}
                 <div>
                     <label style="display: block; font-weight: 800; font-size: 13.5px; color: #001333; margin-bottom: 6px;">
@@ -570,6 +626,43 @@
             previewImg.src = '{{ asset("images/congress.jpg") }}';
         }
 
+        // Reset & Populate Gallery Photos
+        const galleryInput = document.getElementById('editGalleryFiles');
+        if (galleryInput) galleryInput.value = '';
+        document.getElementById('editClearGalleryInput').value = '0';
+
+        const galleryGrid = document.getElementById('editGalleryGrid');
+        galleryGrid.innerHTML = '';
+        const galleryContainer = document.getElementById('editGalleryContainer');
+
+        let galleryItems = [];
+        if (Array.isArray(art.gallery)) {
+            galleryItems = art.gallery;
+        } else if (typeof art.gallery === 'string' && art.gallery.trim().startsWith('[')) {
+            try {
+                galleryItems = JSON.parse(art.gallery);
+            } catch(e) {}
+        }
+
+        if (galleryItems.length > 0) {
+            galleryContainer.style.display = 'block';
+            galleryItems.forEach(imgSrc => {
+                const fullSrc = imgSrc.startsWith('http') ? imgSrc : '/' + imgSrc.replace(/^\/+/, '');
+                const thumb = document.createElement('div');
+                thumb.className = 'gallery-thumb-item existing-gallery-item';
+                thumb.style = 'position: relative; height: 85px; border-radius: 6px; overflow: hidden; border: 1.5px solid #cbd5e1; background: #001333;';
+                thumb.innerHTML = `
+                    <img src="${fullSrc}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <input type="hidden" name="existing_gallery[]" value="${imgSrc}">
+                    <button type="button" onclick="removeExistingGalleryItem(this)" title="Hapus foto ini" style="position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(220, 38, 38, 0.9); color: #ffffff; border: none; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;">&times;</button>
+                `;
+                galleryGrid.appendChild(thumb);
+            });
+            updateGalleryTotalCount();
+        } else {
+            galleryContainer.style.display = 'none';
+        }
+
         document.getElementById('editArticleModal').style.display = 'flex';
     }
 
@@ -584,6 +677,92 @@
                 document.getElementById(targetImgId).src = e.target.result;
             };
             reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewEditGallery(input) {
+        const grid = document.getElementById('editGalleryGrid');
+        const container = document.getElementById('editGalleryContainer');
+
+        // Remove previously previewed new files (keep existing)
+        const oldPreviews = grid.querySelectorAll('.new-gallery-preview');
+        oldPreviews.forEach(el => el.remove());
+
+        if (input.files && input.files.length > 0) {
+            container.style.display = 'block';
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const thumb = document.createElement('div');
+                    thumb.className = 'gallery-thumb-item new-gallery-preview';
+                    thumb.style = 'position: relative; height: 85px; border-radius: 6px; overflow: hidden; border: 2px solid #10b981; background: #001333;';
+                    thumb.innerHTML = `
+                        <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; bottom: 3px; left: 3px; background: rgba(16, 185, 129, 0.95); color: #ffffff; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 3px;">BARU</span>
+                    `;
+                    grid.appendChild(thumb);
+                    updateGalleryTotalCount();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        updateGalleryTotalCount();
+    }
+
+    function removeExistingGalleryItem(btn) {
+        const item = btn.closest('.gallery-thumb-item');
+        if (item) {
+            item.remove();
+            updateGalleryTotalCount();
+        }
+    }
+
+    function clearAllEditGallery() {
+        if (confirm('Yakin ingin menghapus semua foto tambahan dari berita ini?')) {
+            document.getElementById('editGalleryGrid').innerHTML = '';
+            document.getElementById('editClearGalleryInput').value = '1';
+            const fileInput = document.getElementById('editGalleryFiles');
+            if (fileInput) fileInput.value = '';
+            document.getElementById('editGalleryContainer').style.display = 'none';
+        }
+    }
+
+    function updateGalleryTotalCount() {
+        const total = document.querySelectorAll('#editGalleryGrid .gallery-thumb-item').length;
+        const countEl = document.getElementById('editGalleryCount');
+        if (countEl) {
+            countEl.textContent = `Total ${total} Foto Terpasang & Baru:`;
+        }
+        if (total === 0) {
+            document.getElementById('editGalleryContainer').style.display = 'none';
+        } else {
+            document.getElementById('editGalleryContainer').style.display = 'block';
+        }
+    }
+
+    function previewCreateGallery(input) {
+        const grid = document.getElementById('createGalleryGrid');
+        const container = document.getElementById('createGalleryContainer');
+        const countEl = document.getElementById('createGalleryCount');
+        grid.innerHTML = '';
+        if (input.files && input.files.length > 0) {
+            container.style.display = 'block';
+            if (countEl) countEl.textContent = `${input.files.length} Foto Terpilih:`;
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const thumb = document.createElement('div');
+                    thumb.style = 'position: relative; height: 85px; border-radius: 6px; overflow: hidden; border: 2px solid #10b981; background: #001333;';
+                    thumb.innerHTML = `
+                        <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; bottom: 3px; left: 3px; background: rgba(16, 185, 129, 0.95); color: #ffffff; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 3px;">BARU</span>
+                    `;
+                    grid.appendChild(thumb);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            container.style.display = 'none';
         }
     }
 </script>
