@@ -67,13 +67,13 @@
 
     {{-- Article Lead (Excerpt) --}}
     @if($article->excerpt)
-        <div style="font-size: 18px; font-weight: 600; color: #1e293b; line-height: 1.7; margin-bottom: 28px; padding-left: 18px; border-left: 4px solid #ffb700;">
+        <div style="font-size: 18px; font-weight: 600; color: #ffffff; line-height: 1.7; margin-bottom: 28px; padding-left: 18px; border-left: 4px solid #ffb700;">
             {{ $article->excerpt }}
         </div>
     @endif
 
     {{-- Article Body Content --}}
-    <div class="article-content-body" style="font-size: 16.5px; line-height: 1.85; color: #334155; margin-bottom: 45px;">
+    <div class="article-content-body" style="font-size: 16.5px; line-height: 1.85; color: #ffffff; margin-bottom: 45px;">
         {!! $article->content !!}
     </div>
 
@@ -127,11 +127,11 @@
     {{-- Related News Section --}}
     @if(isset($relatedArticles) && $relatedArticles->isNotEmpty())
         <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px;">
-                <h3 style="font-size: 20px; font-weight: 900; color: #001333; margin: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; border-bottom: 2px solid rgba(255, 255, 255, 0.15); padding-bottom: 12px;">
+                <h3 style="font-size: 20px; font-weight: 900; color: #ffffff; margin: 0;">
                     Kabar &amp; Berita Terkait Lainnya
                 </h3>
-                <a href="{{ route('berita') }}" style="color: #001333; font-weight: 800; font-size: 13.5px; text-decoration: none;">
+                <a href="{{ route('berita') }}" style="color: #ffb700; font-weight: 800; font-size: 13.5px; text-decoration: none;">
                     Lihat Semua Berita →
                 </a>
             </div>
@@ -181,14 +181,51 @@
 </script>
 
 <style>
+    .article-content-body {
+        color: #ffffff !important;
+    }
     .article-content-body p {
         margin-bottom: 20px;
+        color: #ffffff !important;
     }
-    .article-content-body strong {
-        color: #001333;
+    .article-content-body strong,
+    .article-content-body b {
+        color: #ffffff !important;
+        font-weight: 800;
     }
-    .article-content-body em {
-        color: #475569;
+    .article-content-body em,
+    .article-content-body i {
+        color: #e2e8f0 !important;
+    }
+    .article-content-body h1,
+    .article-content-body h2,
+    .article-content-body h3,
+    .article-content-body h4,
+    .article-content-body h5,
+    .article-content-body h6 {
+        color: #ffffff !important;
+        margin: 24px 0 12px 0;
+    }
+    .article-content-body ul,
+    .article-content-body ol {
+        color: #ffffff !important;
+        padding-left: 24px;
+        margin-bottom: 20px;
+    }
+    .article-content-body li {
+        color: #ffffff !important;
+        margin-bottom: 8px;
+    }
+    .article-content-body a {
+        color: #ffb700 !important;
+        text-decoration: underline;
+    }
+    .article-content-body blockquote {
+        border-left: 4px solid #ffb700;
+        padding-left: 16px;
+        margin: 20px 0;
+        color: #f1f5f9 !important;
+        font-style: italic;
     }
 </style>
 

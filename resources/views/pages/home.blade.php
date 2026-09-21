@@ -134,7 +134,7 @@
                 </a>
                 <div class="news-info">
                     <h3 style="margin-top: 4px;">
-                        <a href="{{ route('berita.detail', $news->slug) }}" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; line-height: 1.4;">
+                        <a href="{{ route('berita.detail', $news->slug) }}" style="color: #000000; text-decoration: none; font-size: 15px; font-weight: 700; line-height: 1.4; transition: color 0.15s ease;" onmouseover="this.style.color='#00338f'" onmouseout="this.style.color='#000000'">
                             {{ $news->title }}
                         </a>
                     </h3>
@@ -152,8 +152,8 @@
                     <img src="{{ asset(ltrim($item['image'] ?? 'images/congress.jpg', '/')) }}" alt="{{ $item['title'] ?? '' }}">
                 </a>
                 <div class="news-info">
-                    <h3>
-                        <a href="{{ route('berita') }}">
+                    <h3 style="margin-top: 4px;">
+                        <a href="{{ route('berita') }}" style="color: #000000; text-decoration: none; font-size: 15px; font-weight: 700; transition: color 0.15s ease;" onmouseover="this.style.color='#00338f'" onmouseout="this.style.color='#000000'">
                             {{ $item['title'] ?? '' }}
                         </a>
                     </h3>
