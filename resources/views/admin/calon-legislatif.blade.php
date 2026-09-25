@@ -4,6 +4,50 @@
 
 @section('content')
 
+<style>
+    /* ========================================================
+       PERBAIKAN WARNA TEKS MODAL & FORM CALEG
+       ======================================================== */
+    #createCalegModal input,
+    #createCalegModal select,
+    #createCalegModal textarea,
+    #editCalegModal input,
+    #editCalegModal select,
+    #editCalegModal textarea,
+    form[action*="calon-legislatif"] input,
+    form[action*="calon-legislatif"] select {
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+        background-color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    #createCalegModal select option,
+    #editCalegModal select option,
+    form[action*="calon-legislatif"] select option,
+    select option {
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+        background-color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    #createCalegModal label,
+    #editCalegModal label {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+
+    #createCalegModal input::placeholder,
+    #editCalegModal input::placeholder,
+    #createCalegModal textarea::placeholder,
+    #editCalegModal textarea::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+        opacity: 1 !important;
+    }
+</style>
+
 {{-- Admin Top Banner --}}
 <div style="background: linear-gradient(135deg, #000c22 0%, #001f4d 100%); padding: 110px 20px 40px; border-bottom: 3px solid #ffb700;">
     <div style="max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
@@ -139,19 +183,19 @@
         </div>
 
         <div style="min-width: 140px;">
-            <select name="gender" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #ffffff;">
-                <option value="all">Semua Gender</option>
-                <option value="L" {{ request('gender') === 'L' ? 'selected' : '' }}>Laki-laki</option>
-                <option value="P" {{ request('gender') === 'P' ? 'selected' : '' }}>Perempuan</option>
+            <select name="gender" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                <option value="all" style="color: #0f172a; background-color: #ffffff;">Semua Gender</option>
+                <option value="L" {{ request('gender') === 'L' ? 'selected' : '' }} style="color: #0f172a; background-color: #ffffff;">Laki-laki</option>
+                <option value="P" {{ request('gender') === 'P' ? 'selected' : '' }} style="color: #0f172a; background-color: #ffffff;">Perempuan</option>
             </select>
         </div>
 
         <div style="min-width: 150px;">
-            <select name="status" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #ffffff;">
-                <option value="all">Semua Status</option>
-                <option value="DCT" {{ request('status') === 'DCT' ? 'selected' : '' }}>DCT (Calon Tetap)</option>
-                <option value="Caleg Terpilih" {{ request('status') === 'Caleg Terpilih' ? 'selected' : '' }}>Caleg Terpilih</option>
-                <option value="Aktif" {{ request('status') === 'Aktif' ? 'selected' : '' }}>Aktif</option>
+            <select name="status" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                <option value="all" style="color: #0f172a; background-color: #ffffff;">Semua Status</option>
+                <option value="DCT" {{ request('status') === 'DCT' ? 'selected' : '' }} style="color: #0f172a; background-color: #ffffff;">DCT (Calon Tetap)</option>
+                <option value="Caleg Terpilih" {{ request('status') === 'Caleg Terpilih' ? 'selected' : '' }} style="color: #0f172a; background-color: #ffffff;">Caleg Terpilih</option>
+                <option value="Aktif" {{ request('status') === 'Aktif' ? 'selected' : '' }} style="color: #0f172a; background-color: #ffffff;">Aktif</option>
             </select>
         </div>
 
@@ -342,44 +386,44 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Daerah Pemilihan (Dapil) *</label>
-                    <select name="dapil" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Daerah Pemilihan (Dapil) *</label>
+                    <select name="dapil" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
                         @foreach(['Dapil 1', 'Dapil 2', 'Dapil 3', 'Dapil 4', 'Dapil 5', 'Dapil 6'] as $d)
-                            <option value="{{ $d }}">{{ $d }}</option>
+                            <option value="{{ $d }}" style="color: #0f172a; background-color: #ffffff;">{{ $d }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Nomor Urut *</label>
-                    <input type="number" name="nomor_urut" required min="1" max="50" placeholder="1" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Nomor Urut *</label>
+                    <input type="number" name="nomor_urut" required min="1" max="50" placeholder="1" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box; color: #0f172a; background-color: #ffffff; font-weight: 600;">
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Jenis Kelamin *</label>
-                    <select name="jenis_kelamin" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                        <option value="L">Laki-laki (L)</option>
-                        <option value="P">Perempuan (P)</option>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Jenis Kelamin *</label>
+                    <select name="jenis_kelamin" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                        <option value="L" style="color: #0f172a; background-color: #ffffff;">Laki-laki (L)</option>
+                        <option value="P" style="color: #0f172a; background-color: #ffffff;">Perempuan (P)</option>
                     </select>
                 </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Tingkat Parlemen *</label>
-                    <select name="tingkat" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                        <option value="DPRD Kabupaten" selected>DPRD Kabupaten Banyumas</option>
-                        <option value="DPRD Provinsi">DPRD Provinsi Jawa Tengah</option>
-                        <option value="DPR RI">DPR RI (Dapil Jateng VIII)</option>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Tingkat Parlemen *</label>
+                    <select name="tingkat" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                        <option value="DPRD Kabupaten" selected style="color: #0f172a; background-color: #ffffff;">DPRD Kabupaten Banyumas</option>
+                        <option value="DPRD Provinsi" style="color: #0f172a; background-color: #ffffff;">DPRD Provinsi Jawa Tengah</option>
+                        <option value="DPR RI" style="color: #0f172a; background-color: #ffffff;">DPR RI (Dapil Jateng VIII)</option>
                     </select>
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Status Caleg *</label>
-                    <select name="status" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                        <option value="DCT" selected>DCT (Daftar Calon Tetap)</option>
-                        <option value="Caleg Terpilih">Caleg Terpilih</option>
-                        <option value="Aktif">Aktif</option>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Status Caleg *</label>
+                    <select name="status" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                        <option value="DCT" selected style="color: #0f172a; background-color: #ffffff;">DCT (Daftar Calon Tetap)</option>
+                        <option value="Caleg Terpilih" style="color: #0f172a; background-color: #ffffff;">Caleg Terpilih</option>
+                        <option value="Aktif" style="color: #0f172a; background-color: #ffffff;">Aktif</option>
                     </select>
                 </div>
             </div>
@@ -463,45 +507,45 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Dapil *</label>
-                    <select name="dapil" id="editDapil" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Dapil *</label>
+                    <select name="dapil" id="editDapil" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
                         @foreach(['Dapil 1', 'Dapil 2', 'Dapil 3', 'Dapil 4', 'Dapil 5', 'Dapil 6'] as $d)
-                            <option value="{{ $d }}">{{ $d }}</option>
+                            <option value="{{ $d }}" style="color: #0f172a; background-color: #ffffff;">{{ $d }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Nomor Urut *</label>
-                    <input type="number" name="nomor_urut" id="editNomorUrut" required min="1" max="50" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Nomor Urut *</label>
+                    <input type="number" name="nomor_urut" id="editNomorUrut" required min="1" max="50" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box; color: #0f172a; background-color: #ffffff; font-weight: 600;">
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Jenis Kelamin *</label>
-                    <select name="jenis_kelamin" id="editJenisKelamin" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                        <option value="L">Laki-laki (L)</option>
-                        <option value="P">Perempuan (P)</option>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Jenis Kelamin *</label>
+                    <select name="jenis_kelamin" id="editJenisKelamin" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                        <option value="L" style="color: #0f172a; background-color: #ffffff;">Laki-laki (L)</option>
+                        <option value="P" style="color: #0f172a; background-color: #ffffff;">Perempuan (P)</option>
                     </select>
                 </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Tingkat Parlemen *</label>
-                    <select name="tingkat" id="editTingkat" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                        <option value="DPRD Kabupaten">DPRD Kabupaten Banyumas</option>
-                        <option value="DPRD Provinsi">DPRD Provinsi Jawa Tengah</option>
-                        <option value="DPR RI">DPR RI (Dapil Jateng VIII)</option>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Tingkat Parlemen *</label>
+                    <select name="tingkat" id="editTingkat" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                        <option value="DPRD Kabupaten" style="color: #0f172a; background-color: #ffffff;">DPRD Kabupaten Banyumas</option>
+                        <option value="DPRD Provinsi" style="color: #0f172a; background-color: #ffffff;">DPRD Provinsi Jawa Tengah</option>
+                        <option value="DPR RI" style="color: #0f172a; background-color: #ffffff;">DPR RI (Dapil Jateng VIII)</option>
                     </select>
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Status Caleg *</label>
-                    <select name="status" id="editStatus" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                        <option value="DCT">DCT (Daftar Calon Tetap)</option>
-                        <option value="Caleg Terpilih">Caleg Terpilih</option>
-                        <option value="Aktif">Aktif</option>
-                        <option value="Mundur">Mundur</option>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Status Caleg *</label>
+                    <select name="status" id="editStatus" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #0f172a; background-color: #ffffff; font-weight: 600;">
+                        <option value="DCT" style="color: #0f172a; background-color: #ffffff;">DCT (Daftar Calon Tetap)</option>
+                        <option value="Caleg Terpilih" style="color: #0f172a; background-color: #ffffff;">Caleg Terpilih</option>
+                        <option value="Aktif" style="color: #0f172a; background-color: #ffffff;">Aktif</option>
+                        <option value="Mundur" style="color: #0f172a; background-color: #ffffff;">Mundur</option>
                     </select>
                 </div>
             </div>

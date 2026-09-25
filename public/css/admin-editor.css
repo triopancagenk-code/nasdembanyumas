@@ -715,6 +715,12 @@ select.admin-form-control option {
 #uploadC1PdfModal input,
 #uploadC1PdfModal select,
 #uploadC1PdfModal textarea,
+#createCalegModal input,
+#createCalegModal select,
+#createCalegModal textarea,
+#editCalegModal input,
+#editCalegModal select,
+#editCalegModal textarea,
 .admin-modal input,
 .admin-modal select,
 .admin-modal textarea {
@@ -728,6 +734,8 @@ select.admin-form-control option {
 #createTpsModal select option,
 #editTpsModal select option,
 #uploadC1PdfModal select option,
+#createCalegModal select option,
+#editCalegModal select option,
 .admin-modal select option,
 select option {
     color: #000000 !important;
@@ -745,6 +753,10 @@ select option {
 #editTpsModal textarea::placeholder,
 #uploadC1PdfModal input::placeholder,
 #uploadC1PdfModal textarea::placeholder,
+#createCalegModal input::placeholder,
+#createCalegModal textarea::placeholder,
+#editCalegModal input::placeholder,
+#editCalegModal textarea::placeholder,
 .admin-modal input::placeholder,
 .admin-modal textarea::placeholder {
     color: #64748b !important;
@@ -753,9 +765,12 @@ select option {
 
 #createTpsModal label,
 #editTpsModal label,
-#uploadC1PdfModal label {
+#uploadC1PdfModal label,
+#createCalegModal label,
+#editCalegModal label {
     color: #0f172a !important;
     font-weight: 700 !important;
 }
+
 
 
