@@ -28,7 +28,9 @@
                 <li class="menu-item"><a href="{{ route('admin.dpd') }}" style="color: #ffffff; font-weight: 800;">DPD (Dewan Pimpinan Daerah)</a></li>
                 <li class="menu-item"><a href="{{ route('admin.dpc') }}" style="color: #ffffff; font-weight: 800;">DPC (27 Kecamatan)</a></li>
                 <li class="menu-item"><a href="{{ route('admin.dprt') }}" style="color: #ffffff; font-weight: 800;">DPRt (331 Desa)</a></li>
+                <li class="menu-item"><a href="{{ route('admin.quick-count') }}" style="color: #ffffff; font-weight: 800;">Quick Count (Hitung Cepat Pemilu)</a></li>
                 <li class="menu-item"><a href="{{ route('admin.statistik') }}" style="color: #ffffff; font-weight: 800;">Statistik Wilayah &amp; Anggota</a></li>
+                <li class="menu-item"><a href="{{ route('admin.calon-legislatif') }}" style="color: #ffffff; font-weight: 800;">Calon Legislatif (Caleg Banyumas)</a></li>
                 <li class="menu-item"><a href="{{ route('admin.berita') }}" style="color: #ffffff; font-weight: 800;">Berita (Kelola Berita)</a></li>
             @else
                 <li class="menu-item"><a href="{{ route('home') }}">Beranda</a></li>

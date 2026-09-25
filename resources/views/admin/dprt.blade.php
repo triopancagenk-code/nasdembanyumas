@@ -26,8 +26,8 @@
             <a href="{{ route('admin.dpc') }}" class="admin-btn admin-btn-light" style="text-decoration: none; padding: 8px 14px;">
                 ← Ke Halaman DPC
             </a>
-            <a href="{{ route('admin.statistik') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 800;">
-                Ke Statistik Wilayah →
+            <a href="{{ route('admin.quick-count') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 800;">
+                Ke Quick Count →
             </a>
         </div>
     </div>

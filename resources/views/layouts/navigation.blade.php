@@ -19,8 +19,14 @@
                     <li class="menu-item {{ request()->routeIs('admin.dprt*') ? 'current-menu-item' : '' }}">
                         <a href="{{ route('admin.dprt') }}" style="color: #ffffff; font-weight: 800;">DPRt</a>
                     </li>
+                    <li class="menu-item {{ request()->routeIs('admin.quick-count*') ? 'current-menu-item' : '' }}">
+                        <a href="{{ route('admin.quick-count') }}" style="color: #ffffff; font-weight: 800;">Quick Count</a>
+                    </li>
                     <li class="menu-item {{ request()->routeIs('admin.statistik*') ? 'current-menu-item' : '' }}">
                         <a href="{{ route('admin.statistik') }}" style="color: #ffffff; font-weight: 800;">Statistik</a>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('admin.calon-legislatif*') ? 'current-menu-item' : '' }}">
+                        <a href="{{ route('admin.calon-legislatif') }}" style="color: #ffffff; font-weight: 800;">Calon Legislatif</a>
                     </li>
                     <li class="menu-item {{ request()->routeIs('admin.berita*') ? 'current-menu-item' : '' }}">
                         <a href="{{ route('admin.berita') }}" style="color: #ffffff; font-weight: 800;">Berita</a>

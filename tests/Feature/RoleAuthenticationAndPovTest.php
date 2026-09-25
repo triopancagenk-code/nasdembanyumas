@@ -112,7 +112,9 @@ class RoleAuthenticationAndPovTest extends TestCase
         $response->assertSee('DPD');
         $response->assertSee('DPC');
         $response->assertSee('DPRt');
+        $response->assertSee('Quick Count');
         $response->assertSee('Statistik');
+        $response->assertSee('Calon Legislatif');
         $response->assertSee('Berita');
     }
 
@@ -199,5 +201,94 @@ class RoleAuthenticationAndPovTest extends TestCase
     {
         $response = $this->get('/admin/dpd');
         $response->assertRedirect(route('login'));
+    }
+
+    public function test_admin_quick_count_page_renders_and_crud_works(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+        \App\Models\QuickCountTps::where('tps_number', 'TPS 99')->delete();
+
+        // 1. Visit Quick Count page
+        $response = $this->actingAs($admin)->get('/admin/quick-count');
+        $response->assertStatus(200);
+        $response->assertSee('Quick Count &amp; Real Count', false);
+        $response->assertSee('SUARA MASUK NASDEM');
+        $response->assertSee('Partai NasDem');
+        $response->assertSee('Dapil Banyumas 1');
+
+        // 2. Create new TPS entry
+        $storeResponse = $this->actingAs($admin)->post('/admin/quick-count', [
+            'dapil' => 'Dapil 1',
+            'kecamatan_name' => 'Purwokerto Barat',
+            'desa_name' => 'Kober',
+            'tps_number' => 'TPS 99',
+            'total_dpt' => 270,
+            'suara_nasdem' => 88,
+            'suara_sah' => 250,
+            'suara_tidak_sah' => 10,
+            'saksi_name' => 'Saksi Uji Coba',
+            'saksi_phone' => '0812-9999-8888',
+            'status' => 'Menunggu Verifikasi',
+            'notes' => 'Catatan uji coba test',
+        ]);
+        $storeResponse->assertRedirect(route('admin.quick-count'));
+
+        $this->assertDatabaseHas('quick_count_tps', [
+            'desa_name' => 'Kober',
+            'tps_number' => 'TPS 99',
+            'suara_nasdem' => 88,
+        ]);
+
+        $tps = \App\Models\QuickCountTps::where('tps_number', 'TPS 99')->first();
+
+        // 3. Verify TPS
+        $verifyResponse = $this->actingAs($admin)->postJson("/admin/quick-count/{$tps->id}/verify");
+        $verifyResponse->assertStatus(200);
+        $verifyResponse->assertJson(['success' => true]);
+        $this->assertEquals('Terverifikasi', $tps->fresh()->status);
+    }
+
+    public function test_admin_calon_legislatif_page_renders_and_crud_works(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+        \App\Models\Candidate::where('nama', 'Caleg Uji Coba NasDem, S.H.')->delete();
+
+        // 1. Visit Calon Legislatif page
+        $response = $this->actingAs($admin)->get('/admin/calon-legislatif');
+        $response->assertStatus(200);
+        $response->assertSee('Calon Legislatif');
+        $response->assertSee('Keterwakilan Perempuan');
+        $response->assertSee('Dr. H. Edris Santoso, S.E., M.M.');
+
+        // 2. Create new Candidate
+        $storeResponse = $this->actingAs($admin)->post('/admin/calon-legislatif', [
+            'nama' => 'Caleg Uji Coba NasDem, S.H.',
+            'tingkat' => 'DPRD Kabupaten',
+            'dapil' => 'Dapil 1',
+            'nomor_urut' => 10,
+            'jenis_kelamin' => 'P',
+            'jabatan' => 'Kader Penggerak',
+            'basis_wilayah' => 'Purwokerto Barat',
+            'target_suara' => 6000,
+            'suara_masuk' => 1200,
+            'status' => 'DCT',
+            'slogan' => 'Bersama Menang',
+            'phone' => '0812-0000-1111',
+            'pendidikan_terakhir' => 'S1 Hukum',
+        ]);
+        $storeResponse->assertRedirect(route('admin.calon-legislatif'));
+
+        $this->assertDatabaseHas('candidates', [
+            'nama' => 'Caleg Uji Coba NasDem, S.H.',
+            'nomor_urut' => 10,
+        ]);
+
+        $candidate = \App\Models\Candidate::where('nama', 'Caleg Uji Coba NasDem, S.H.')->first();
+
+        // 3. Toggle Elected Status
+        $toggleResponse = $this->actingAs($admin)->postJson("/admin/calon-legislatif/{$candidate->id}/toggle-elected");
+        $toggleResponse->assertStatus(200);
+        $toggleResponse->assertJson(['success' => true, 'status' => 'Caleg Terpilih']);
+        $this->assertEquals('Caleg Terpilih', $candidate->fresh()->status);
     }
 }

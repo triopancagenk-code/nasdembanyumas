@@ -23,11 +23,11 @@
         </div>
 
         <div style="display: flex; gap: 10px;">
-            <a href="{{ route('admin.dpd') }}" class="admin-btn admin-btn-light" style="text-decoration: none; padding: 8px 14px;">
-                ← Struktur DPD
-            </a>
             <a href="{{ route('admin.dpc') }}" class="admin-btn admin-btn-light" style="text-decoration: none; padding: 8px 14px;">
-                Kelola DPC
+                ← Kelola DPC
+            </a>
+            <a href="{{ route('admin.calon-legislatif') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 800;">
+                Ke Calon Legislatif →
             </a>
         </div>
     </div>

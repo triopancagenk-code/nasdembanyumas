@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminArticleController;
+use App\Http\Controllers\AdminCandidateController;
 use App\Http\Controllers\AdminContentController;
 use App\Http\Controllers\AdminPartyController;
+use App\Http\Controllers\AdminQuickCountController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PublicPartyController;
@@ -29,7 +31,7 @@ Route::post('/admin/save-content', [AdminContentController::class, 'save'])->nam
 Route::post('/admin/upload-image', [AdminContentController::class, 'uploadImage'])->name('admin.content.upload');
 Route::post('/admin/reset-content', [AdminContentController::class, 'reset'])->name('admin.content.reset');
 
-// POV Admin Feature Routes (DPD, DPC, DPRt, Statistik, Berita)
+// POV Admin Feature Routes (DPD, DPC, DPRt, Quick Count, Statistik, Calon Legislatif, Berita)
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
     // 1. DPD
     Route::get('/dpd', [AdminPartyController::class, 'dpd'])->name('dpd');
@@ -43,10 +45,25 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::get('/dprt', [AdminPartyController::class, 'dprt'])->name('dprt');
     Route::post('/dprt/{id}', [AdminPartyController::class, 'updateDprt'])->name('dprt.update');
 
-    // 4. Statistik (Wilayah & Anggota)
+    // 4. Quick Count (Hitung Cepat Pemilu) - Di samping kanan DPRt
+    Route::get('/quick-count', [AdminQuickCountController::class, 'index'])->name('quick-count');
+    Route::post('/quick-count', [AdminQuickCountController::class, 'store'])->name('quick-count.store');
+    Route::post('/quick-count/{id}', [AdminQuickCountController::class, 'update'])->name('quick-count.update');
+    Route::post('/quick-count/{id}/verify', [AdminQuickCountController::class, 'verify'])->name('quick-count.verify');
+    Route::delete('/quick-count/{id}', [AdminQuickCountController::class, 'destroy'])->name('quick-count.destroy');
+    Route::get('/quick-count/export', [AdminQuickCountController::class, 'export'])->name('quick-count.export');
+
+    // 5. Statistik (Wilayah & Anggota)
     Route::get('/statistik', [AdminPartyController::class, 'statistik'])->name('statistik');
 
-    // 5. Berita (Manajemen Berita & Publikasi ke POV Pengguna)
+    // 6. Calon Legislatif (Dapil 1 - 6 Banyumas) - Di samping kanan Statistik
+    Route::get('/calon-legislatif', [AdminCandidateController::class, 'index'])->name('calon-legislatif');
+    Route::post('/calon-legislatif', [AdminCandidateController::class, 'store'])->name('calon-legislatif.store');
+    Route::post('/calon-legislatif/{id}', [AdminCandidateController::class, 'update'])->name('calon-legislatif.update');
+    Route::post('/calon-legislatif/{id}/toggle-elected', [AdminCandidateController::class, 'toggleElected'])->name('calon-legislatif.toggle-elected');
+    Route::delete('/calon-legislatif/{id}', [AdminCandidateController::class, 'destroy'])->name('calon-legislatif.destroy');
+
+    // 7. Berita (Manajemen Berita & Publikasi ke POV Pengguna)
     Route::get('/berita', [AdminArticleController::class, 'index'])->name('berita');
     Route::post('/berita', [AdminArticleController::class, 'store'])->name('berita.store');
     Route::post('/berita/{id}', [AdminArticleController::class, 'update'])->name('berita.update');
