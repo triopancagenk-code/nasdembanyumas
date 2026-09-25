@@ -706,6 +706,15 @@ select.admin-form-control option {
 #createArticleModal input,
 #createArticleModal select,
 #createArticleModal textarea,
+#createTpsModal input,
+#createTpsModal select,
+#createTpsModal textarea,
+#editTpsModal input,
+#editTpsModal select,
+#editTpsModal textarea,
+#uploadC1PdfModal input,
+#uploadC1PdfModal select,
+#uploadC1PdfModal textarea,
 .admin-modal input,
 .admin-modal select,
 .admin-modal textarea {
@@ -716,8 +725,13 @@ select.admin-form-control option {
 
 #editArticleModal select option,
 #createArticleModal select option,
-.admin-modal select option {
+#createTpsModal select option,
+#editTpsModal select option,
+#uploadC1PdfModal select option,
+.admin-modal select option,
+select option {
     color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
     background-color: #ffffff !important;
 }
 
@@ -725,8 +739,23 @@ select.admin-form-control option {
 #editArticleModal textarea::placeholder,
 #createArticleModal input::placeholder,
 #createArticleModal textarea::placeholder,
+#createTpsModal input::placeholder,
+#createTpsModal textarea::placeholder,
+#editTpsModal input::placeholder,
+#editTpsModal textarea::placeholder,
+#uploadC1PdfModal input::placeholder,
+#uploadC1PdfModal textarea::placeholder,
 .admin-modal input::placeholder,
 .admin-modal textarea::placeholder {
     color: #64748b !important;
     -webkit-text-fill-color: #64748b !important;
 }
+
+#createTpsModal label,
+#editTpsModal label,
+#uploadC1PdfModal label {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+

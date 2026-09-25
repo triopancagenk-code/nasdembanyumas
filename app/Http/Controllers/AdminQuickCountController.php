@@ -130,7 +130,17 @@ class AdminQuickCountController extends Controller
             $query->where('status', $request->status);
         }
 
-        $tpsList = $query->orderByDesc('id')->paginate(15)->withQueryString();
+        $sort = $request->input('sort', 'wilayah');
+        if ($sort === 'newest') {
+            $query->orderByDesc('id');
+        } elseif ($sort === 'suara_desc') {
+            $query->orderByDesc('suara_nasdem');
+        } else {
+            $query->orderBy('dapil')->orderBy('kecamatan_name')->orderBy('tps_number');
+        }
+
+        $perPage = (int) $request->input('per_page', 30);
+        $tpsList = $query->paginate($perPage)->withQueryString();
 
         // 5. Data Referensi Wilayah untuk Form Input (27 Kecamatan & Desa)
         $dpcs = Dpc::orderBy('kecamatan_name')->get();
@@ -146,14 +156,102 @@ class AdminQuickCountController extends Controller
         $pendingTpsCount = QuickCountTps::where('status', 'Menunggu Verifikasi')->count();
         $totalSuaraNasdemTps = QuickCountTps::sum('suara_nasdem');
         $totalSuaraSahTps = QuickCountTps::sum('suara_sah');
+        $allTpsList = QuickCountTps::orderBy('kecamatan_name')->orderBy('desa_name')->orderBy('tps_number')->get();
 
         return view('admin.quick-count', compact(
             'parties', 'totalSuaraSemuaPartai', 'nasdemSuara', 'nasdemKursi', 'nasdemPersen',
             'totalTpsBanyumas', 'tpsMasukCount', 'persenTpsMasuk',
             'dapils', 'tpsList', 'dpcs', 'desaByKecamatan',
             'recordedTpsCount', 'verifiedTpsCount', 'pendingTpsCount',
-            'totalSuaraNasdemTps', 'totalSuaraSahTps'
+            'totalSuaraNasdemTps', 'totalSuaraSahTps', 'allTpsList'
         ));
+    }
+
+    /**
+     * Dedicated Upload C1 PDF handler.
+     */
+    public function uploadC1Pdf(Request $request): RedirectResponse|JsonResponse
+    {
+        $mode = $request->input('mode', 'existing');
+
+        if ($mode === 'existing') {
+            $validated = $request->validate([
+                'tps_id' => 'required|exists:quick_count_tps,id',
+                'c1_pdf_file' => 'required|file|mimes:pdf|max:20480',
+                'notes' => 'nullable|string|max:1000',
+            ], [
+                'tps_id.required' => 'Silakan pilih TPS yang ingin ditautkan dokumen C1 PDF.',
+                'c1_pdf_file.required' => 'Berkas C1 PDF wajib diunggah.',
+                'c1_pdf_file.mimes' => 'Berkas harus dalam format dokumen PDF (.pdf).',
+                'c1_pdf_file.max' => 'Ukuran berkas C1 PDF maksimal 20 MB.',
+            ]);
+
+            $tps = QuickCountTps::findOrFail($validated['tps_id']);
+
+            $file = $request->file('c1_pdf_file');
+            $filename = 'c1_' . time() . '_' . Str::random(8) . '.pdf';
+            $path = $file->storeAs('uploads/c1', $filename, 'public');
+
+            $updateData = ['c1_photo' => '/storage/' . $path];
+            if (!empty($validated['notes'])) {
+                $updateData['notes'] = $tps->notes ? ($tps->notes . ' | ' . $validated['notes']) : $validated['notes'];
+            }
+            $tps->update($updateData);
+
+            $message = "Dokumen C1 PDF berhasil diunggah dan ditautkan ke {$tps->tps_number} Desa {$tps->desa_name}!";
+        } else {
+            $validated = $request->validate([
+                'dapil' => 'required|string|max:50',
+                'kecamatan_name' => 'required|string|max:100',
+                'desa_name' => 'required|string|max:100',
+                'tps_number' => 'required|string|max:50',
+                'total_dpt' => 'nullable|integer|min:0',
+                'suara_nasdem' => 'required|integer|min:0',
+                'suara_sah' => 'required|integer|min:0',
+                'suara_tidak_sah' => 'nullable|integer|min:0',
+                'saksi_name' => 'nullable|string|max:150',
+                'saksi_phone' => 'nullable|string|max:50',
+                'status' => 'required|string|in:Terverifikasi,Menunggu Verifikasi,Perlu Koreksi',
+                'notes' => 'nullable|string|max:1000',
+                'c1_pdf_file' => 'required|file|mimes:pdf|max:20480',
+            ], [
+                'c1_pdf_file.required' => 'Berkas C1 PDF wajib diunggah.',
+                'c1_pdf_file.mimes' => 'Berkas harus berupa format dokumen PDF (.pdf).',
+                'c1_pdf_file.max' => 'Ukuran berkas C1 PDF maksimal 20 MB.',
+            ]);
+
+            $file = $request->file('c1_pdf_file');
+            $filename = 'c1_' . time() . '_' . Str::random(8) . '.pdf';
+            $path = $file->storeAs('uploads/c1', $filename, 'public');
+
+            $tps = QuickCountTps::create([
+                'dapil' => $validated['dapil'],
+                'kecamatan_name' => $validated['kecamatan_name'],
+                'desa_name' => $validated['desa_name'],
+                'tps_number' => $validated['tps_number'],
+                'total_dpt' => $validated['total_dpt'] ?? 250,
+                'suara_nasdem' => $validated['suara_nasdem'],
+                'suara_sah' => $validated['suara_sah'],
+                'suara_tidak_sah' => $validated['suara_tidak_sah'] ?? 0,
+                'saksi_name' => $validated['saksi_name'] ?? null,
+                'saksi_phone' => $validated['saksi_phone'] ?? null,
+                'c1_photo' => '/storage/' . $path,
+                'status' => $validated['status'],
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            $message = "Hasil TPS {$tps->tps_number} Desa {$tps->desa_name} beserta berkas C1 PDF berhasil disimpan!";
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'data' => $tps,
+            ]);
+        }
+
+        return redirect()->route('admin.quick-count')->with('success', $message);
     }
 
     /**
@@ -174,13 +272,14 @@ class AdminQuickCountController extends Controller
             'saksi_phone' => 'nullable|string|max:50',
             'status' => 'required|string|in:Terverifikasi,Menunggu Verifikasi,Perlu Koreksi',
             'notes' => 'nullable|string|max:1000',
-            'c1_photo_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'c1_photo_file' => 'nullable|file|mimes:jpeg,png,jpg,webp,pdf|max:20480',
         ]);
 
         $photoPath = null;
         if ($request->hasFile('c1_photo_file') && $request->file('c1_photo_file')->isValid()) {
             $file = $request->file('c1_photo_file');
-            $filename = 'c1_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+            $ext = strtolower($file->getClientOriginalExtension());
+            $filename = 'c1_' . time() . '_' . Str::random(8) . '.' . $ext;
             $path = $file->storeAs('uploads/c1', $filename, 'public');
             $photoPath = '/storage/' . $path;
         }
@@ -234,12 +333,13 @@ class AdminQuickCountController extends Controller
             'saksi_phone' => 'nullable|string|max:50',
             'status' => 'required|string|in:Terverifikasi,Menunggu Verifikasi,Perlu Koreksi',
             'notes' => 'nullable|string|max:1000',
-            'c1_photo_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'c1_photo_file' => 'nullable|file|mimes:jpeg,png,jpg,webp,pdf|max:20480',
         ]);
 
         if ($request->hasFile('c1_photo_file') && $request->file('c1_photo_file')->isValid()) {
             $file = $request->file('c1_photo_file');
-            $filename = 'c1_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+            $ext = strtolower($file->getClientOriginalExtension());
+            $filename = 'c1_' . time() . '_' . Str::random(8) . '.' . $ext;
             $path = $file->storeAs('uploads/c1', $filename, 'public');
             $validated['c1_photo'] = '/storage/' . $path;
         }

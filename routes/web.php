@@ -45,9 +45,9 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::get('/dprt', [AdminPartyController::class, 'dprt'])->name('dprt');
     Route::post('/dprt/{id}', [AdminPartyController::class, 'updateDprt'])->name('dprt.update');
 
-    // 4. Quick Count (Hitung Cepat Pemilu) - Di samping kanan DPRt
     Route::get('/quick-count', [AdminQuickCountController::class, 'index'])->name('quick-count');
     Route::post('/quick-count', [AdminQuickCountController::class, 'store'])->name('quick-count.store');
+    Route::post('/quick-count/upload-c1', [AdminQuickCountController::class, 'uploadC1Pdf'])->name('quick-count.upload-c1');
     Route::post('/quick-count/{id}', [AdminQuickCountController::class, 'update'])->name('quick-count.update');
     Route::post('/quick-count/{id}/verify', [AdminQuickCountController::class, 'verify'])->name('quick-count.verify');
     Route::delete('/quick-count/{id}', [AdminQuickCountController::class, 'destroy'])->name('quick-count.destroy');
