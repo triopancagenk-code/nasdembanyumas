@@ -22,8 +22,11 @@
             </p>
         </div>
 
-        <div style="display: flex; gap: 10px;">
-            <a href="{{ route('admin.dpc') }}" class="admin-btn admin-btn-light" style="text-decoration: none; padding: 8px 14px;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ route('admin.dprt.pengurus') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                👥 Kelola 9 Pengurus DPRt →
+            </a>
+            <a href="{{ route('admin.dpc') }}" class="admin-btn admin-btn-light" style="text-decoration: none; padding: 8px 14px; background: #ffffff; color: #001333;">
                 ← Ke Halaman DPC
             </a>
             <a href="{{ route('admin.quick-count') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 800;">
@@ -113,8 +116,8 @@
                             <td style="padding: 12px 16px; color: #64748b; font-weight: 700;">
                                 {{ $loop->iteration + ($dprts->currentPage() - 1) * $dprts->perPage() }}
                             </td>
-                            <td style="padding: 12px 16px;">
-                                <strong style="color: #001333; font-size: 14px;">{{ $dprt->desa_name }}</strong>
+                            <td onclick="window.location.href='{{ route('admin.dprt.pengurus', ['id' => $dprt->id]) }}'" style="padding: 12px 16px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#fff8e6'; this.querySelector('.desa-title').style.color='#d97706';" onmouseout="this.style.background='transparent'; this.querySelector('.desa-title').style.color='#001333';" title="Klik sembarang pada kolom desa ini untuk membuka 9 Pengurus DPRt {{ $dprt->type }} {{ $dprt->desa_name }}">
+                                <strong class="desa-title" style="color: #001333; font-size: 14px; transition: color 0.15s ease;">{{ $dprt->desa_name }}</strong>
                                 <span style="display: block; font-size: 11px; color: #64748b;">{{ $dprt->type }}</span>
                             </td>
                             <td style="padding: 12px 16px;">

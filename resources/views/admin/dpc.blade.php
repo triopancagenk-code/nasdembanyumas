@@ -22,8 +22,11 @@
             </p>
         </div>
 
-        <div style="display: flex; gap: 10px;">
-            <a href="{{ route('admin.dprt') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 800;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ route('admin.dpc.pengurus') }}" class="btn-yellow" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                👥 Kelola 9 Pengurus Tiap Kecamatan →
+            </a>
+            <a href="{{ route('admin.dprt') }}" class="admin-btn admin-btn-light" style="text-decoration: none; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 800; background: #ffffff; color: #001333;">
                 Ke Halaman DPRt (Desa) →
             </a>
         </div>
@@ -92,7 +95,7 @@
     <!-- DPC GRID OF ALL 27 KECAMATAN -->
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px;">
         @foreach($dpcs as $dpc)
-            <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.15s ease, border-color 0.15s ease;" onmouseover="this.style.borderColor='#ffb700'; this.style.transform='translateY(-3px)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='none';">
+            <div onclick="window.location.href='{{ route('admin.dpc.pengurus', ['dapil' => $dpc->dapil, 'kecamatan' => $dpc->kecamatan_name]) }}'" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#ffb700'; this.style.boxShadow='0 12px 24px rgba(0, 24, 68, 0.12)'; this.style.transform='translateY(-4px)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.03)'; this.style.transform='none';" title="Klik untuk membuka 9 Pengurus DPC Kec. {{ $dpc->kecamatan_name }}">
                 <div style="padding: 20px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                         <div>
@@ -138,14 +141,14 @@
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 10px 18px; display: flex; justify-content: space-between; align-items: center;">
-                    <a href="{{ route('admin.dprt', ['kecamatan' => $dpc->kecamatan_name]) }}" style="font-size: 12px; color: #001333; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 4px;">
-                        <span>Lihat Desa Ranting</span>
+                <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                    <a href="{{ route('admin.dprt', ['kecamatan' => $dpc->kecamatan_name]) }}" onclick="event.stopPropagation();" style="font-size: 12px; color: #001333; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                        <span>Desa Ranting</span>
                         <span style="color: #ffb700;">→</span>
                     </a>
 
-                    <button type="button" onclick="openEditDpcModal({{ $dpc->id }}, '{{ addslashes($dpc->kecamatan_name) }}', '{{ addslashes($dpc->ketua_name) }}', '{{ addslashes($dpc->sekretaris_name ?? '') }}', '{{ addslashes($dpc->bendahara_name ?? '') }}', '{{ addslashes($dpc->office_address ?? '') }}', '{{ addslashes($dpc->phone ?? '') }}', '{{ addslashes($dpc->status) }}', {{ $dpc->total_kader }})" style="background: #001333; color: #ffb700; border: none; padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 800; cursor: pointer;">
-                        ✏️ Edit Pengurus
+                    <button type="button" onclick="event.stopPropagation(); openEditDpcModal({{ $dpc->id }}, '{{ addslashes($dpc->kecamatan_name) }}', '{{ addslashes($dpc->ketua_name) }}', '{{ addslashes($dpc->sekretaris_name ?? '') }}', '{{ addslashes($dpc->bendahara_name ?? '') }}', '{{ addslashes($dpc->office_address ?? '') }}', '{{ addslashes($dpc->phone ?? '') }}', '{{ addslashes($dpc->status) }}', {{ $dpc->total_kader }});" style="background: #001333; color: #ffffff; border: none; padding: 6px 14px; border-radius: 4px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                        ✏️ Edit
                     </button>
                 </div>
             </div>

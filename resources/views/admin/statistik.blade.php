@@ -87,14 +87,14 @@
                 <h3 style="margin: 0; font-size: 16px; font-weight: 800;">Rekapitulasi Teritorial Berdasarkan Daerah Pemilihan (Dapil)</h3>
             </div>
             <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 13px;">
                     <thead>
                         <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #475569;">
-                            <th style="padding: 12px 18px; font-weight: 800;">Nama Dapil</th>
-                            <th style="padding: 12px 16px; font-weight: 800;">Kecamatan</th>
-                            <th style="padding: 12px 16px; font-weight: 800;">DPRt (Desa)</th>
-                            <th style="padding: 12px 18px; font-weight: 800; text-align: right;">Jumlah Kader</th>
-                            <th style="padding: 12px 18px; font-weight: 800; text-align: right;">Perolehan Suara</th>
+                            <th style="padding: 12px 18px; font-weight: 800; text-align: center;">Nama Dapil</th>
+                            <th style="padding: 12px 16px; font-weight: 800; text-align: center;">Kecamatan</th>
+                            <th style="padding: 12px 16px; font-weight: 800; text-align: center;">DPRt (Desa)</th>
+                            <th style="padding: 12px 18px; font-weight: 800; text-align: center;">Jumlah Kader</th>
+                            <th style="padding: 12px 18px; font-weight: 800; text-align: center;">Perolehan Suara</th>
                             <th style="padding: 12px 16px; font-weight: 800; text-align: center;">Rasio Suara/Kader</th>
                             <th style="padding: 12px 18px; font-weight: 800; text-align: center;">Status Struktur</th>
                         </tr>
@@ -105,21 +105,21 @@
                                 $dapilRatio = round($dapil->total_suara / max(1, $dapil->total_kader), 2);
                             @endphp
                             <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 18px; font-weight: 800; color: #001333;">
-                                    <span style="background: rgba(0, 24, 68, 0.08); padding: 3px 8px; border-radius: 4px;">
-                                        {{ $dapil->dapil }}
+                                <td style="padding: 14px 18px; font-weight: 800; color: #001333; text-align: center;">
+                                    <span style="background: rgba(0, 24, 68, 0.08); padding: 4px 10px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                        <span style="color: #0284c7;">📍</span> {{ $dapil->dapil }}
                                     </span>
                                 </td>
-                                <td style="padding: 14px 16px; font-weight: 700; color: #0f172a;">
+                                <td style="padding: 14px 16px; font-weight: 700; color: #0f172a; text-align: center;">
                                     {{ $dapil->total_dpc }} Kecamatan
                                 </td>
-                                <td style="padding: 14px 16px; color: #475569;">
+                                <td style="padding: 14px 16px; color: #475569; text-align: center;">
                                     {{ $dapil->total_ranting }} Desa
                                 </td>
-                                <td style="padding: 14px 18px; font-weight: 800; color: #001844; text-align: right;">
+                                <td style="padding: 14px 18px; font-weight: 800; color: #001844; text-align: center;">
                                     {{ number_format($dapil->total_kader, 0, ',', '.') }}
                                 </td>
-                                <td style="padding: 14px 18px; font-weight: 900; color: #b45309; text-align: right;">
+                                <td style="padding: 14px 18px; font-weight: 900; color: #b45309; text-align: center;">
                                     {{ number_format($dapil->total_suara, 0, ',', '.') }}
                                 </td>
                                 <td style="padding: 14px 16px; text-align: center;">

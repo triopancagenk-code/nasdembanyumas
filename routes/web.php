@@ -39,10 +39,14 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 
     // 2. DPC (27 Kecamatan)
     Route::get('/dpc', [AdminPartyController::class, 'dpc'])->name('dpc');
+    Route::get('/dpc/pengurus', [AdminPartyController::class, 'dpcOfficers'])->name('dpc.pengurus');
+    Route::post('/dpc/pengurus/{id}', [AdminPartyController::class, 'updateDpcOfficer'])->name('dpc.pengurus.update');
     Route::post('/dpc/{id}', [AdminPartyController::class, 'updateDpc'])->name('dpc.update');
 
     // 3. DPRt (331 Desa/Kelurahan)
     Route::get('/dprt', [AdminPartyController::class, 'dprt'])->name('dprt');
+    Route::get('/dprt/pengurus', [AdminPartyController::class, 'dprtOfficers'])->name('dprt.pengurus');
+    Route::post('/dprt/pengurus/{id}', [AdminPartyController::class, 'updateDprtOfficer'])->name('dprt.pengurus.update');
     Route::post('/dprt/{id}', [AdminPartyController::class, 'updateDprt'])->name('dprt.update');
 
     Route::get('/quick-count', [AdminQuickCountController::class, 'index'])->name('quick-count');

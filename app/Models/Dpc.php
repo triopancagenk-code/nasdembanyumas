@@ -52,4 +52,9 @@ class Dpc extends Model
     {
         return $this->hasMany(Dprt::class, 'dpc_id');
     }
+
+    public function officers(): HasMany
+    {
+        return $this->hasMany(DpcOfficer::class, 'dpc_id')->orderBy('sort_order');
+    }
 }

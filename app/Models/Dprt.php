@@ -25,4 +25,9 @@ class Dprt extends Model
     {
         return $this->belongsTo(Dpc::class, 'dpc_id');
     }
+
+    public function officers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DprtOfficer::class, 'dprt_id')->orderBy('sort_order');
+    }
 }
